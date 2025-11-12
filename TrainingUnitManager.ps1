@@ -40,6 +40,44 @@ function Write-ColorOutput {
     }
 }
 
+function Get-TypeLabel {
+    param(
+        [Parameter(Mandatory=$true)]
+        [int]$TypeValue
+    )
+
+    switch ($TypeValue) {
+        1 { return "Course" }
+        2 { return "Online Resource" }
+        3 { return "Document" }
+        6 { return "Face to Face" }
+        default { return "Unknown ($TypeValue)" }
+    }
+}
+
+function Get-TypeValue {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$TypeLabel
+    )
+
+    switch ($TypeLabel.Trim()) {
+        "Course" { return 1 }
+        "Online Resource" { return 2 }
+        "Document" { return 3 }
+        "Face to Face" { return 6 }
+        default {
+            # Try to parse as integer for backward compatibility
+            $intValue = 0
+            if ([int]::TryParse($TypeLabel, [ref]$intValue)) {
+                return $intValue
+            }
+            Write-ColorOutput "Warning: Unknown Type label '$TypeLabel', defaulting to 1 (Course)" -Type "Warning"
+            return 1
+        }
+    }
+}
+
 function Get-UserInput {
     Write-ColorOutput "`n=== Training Unit Manager ===" -Type "Info"
     Write-ColorOutput "Please provide the following information:`n" -Type "Info"
@@ -298,7 +336,7 @@ function Export-TrainingUnits {
         $exportObject = [PSCustomObject]@{
             "Title" = $details.Title
             "Description" = $details.Description
-            "Type" = $details.Type
+            "Type" = (Get-TypeLabel -TypeValue $details.Type)
             "Assessment Label" = $details.AssessmentMethod
             "Renew Cycle" = $details.RenewCycle
             "Provider" = $details.Provider
@@ -399,7 +437,7 @@ function Import-TrainingUnits {
                 Id = 0  # 0 for new training unit
                 Title = $row.Title
                 Description = $row.Description
-                Type = [int]$row.Type
+                Type = (Get-TypeValue -TypeLabel $row.Type)
                 AssessmentMethod = [int]$row.'Assessed Label'
                 RenewCycle = [int]$row.'Renew Cycle'
                 Provider = $row.Provider

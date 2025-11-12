@@ -49,7 +49,7 @@ The export feature will:
 **Export CSV Columns:**
 - Title
 - Description
-- Type (integer value)
+- Type (label value: Course, Online Resource, Document, Face to Face)
 - Assessment Label (integer value)
 - Renew Cycle (integer value)
 - Provider
@@ -70,7 +70,7 @@ The import feature will:
 **Import CSV Columns Required:**
 - Title
 - Description
-- Type (integer: see Type Values below)
+- Type (label or integer: see Type Values below)
 - Assessed Label (integer: see Assessment Method Values below)
 - Renew Cycle (integer: see Renew Cycle Values below)
 - Provider
@@ -82,10 +82,16 @@ The import feature will:
 ## Field Value Reference
 
 ### Type Values
-Contact your Process Manager administrator for the specific integer values used in your system. Common examples:
-- `1` - Course
-- `2` - Online Resource
-- `3` - Document
+You can use either the label or the integer value in your import CSV:
+
+| Label | Integer Value |
+|-------|---------------|
+| Course | 1 |
+| Online Resource | 2 |
+| Document | 3 |
+| Face to Face | 6 |
+
+**Note:** Export files will use the label format (e.g., "Course"). Import accepts both formats for backward compatibility.
 
 ### Assessment Method Values
 Contact your Process Manager administrator for the specific integer values used in your system. Common examples:
@@ -105,8 +111,8 @@ See [ImportTemplate.csv](ImportTemplate.csv) for an example CSV file format.
 
 ```csv
 Title,Description,Type,Assessed Label,Renew Cycle,Provider,Linked Processes: uniqueIds,Linked Documents: Titles
-Safety Training 101,Basic safety training for all employees,1,1,1,Safety Corp,3be24da1-4e95-4edb-b94c-f39e14c61081,Safety Manual.pdf;Emergency Procedures.docx
-Advanced Excel Course,Advanced Excel training for data analysts,2,2,12,Tech Training LLC,,Excel Guide.xlsx
+Safety Training 101,Basic safety training for all employees,Course,1,1,Safety Corp,3be24da1-4e95-4edb-b94c-f39e14c61081,Safety Manual.pdf;Emergency Procedures.docx
+Advanced Excel Course,Advanced Excel training for data analysts,Online Resource,2,12,Tech Training LLC,,Excel Guide.xlsx
 ```
 
 ## Error Handling
@@ -176,7 +182,13 @@ For issues or questions:
 
 ## Version History
 
-**v1.0** (Current)
+**v1.1** (Current)
+- **Enhanced Type Field Handling**
+  - Export now outputs Type as labels (Course, Online Resource, Document, Face to Face)
+  - Import accepts both labels and integer values for backward compatibility
+  - Added Type conversion helper functions
+
+**v1.0**
 - Initial release
 - Export training units to CSV
 - Import training units from CSV
