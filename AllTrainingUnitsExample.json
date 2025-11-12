@@ -1,0 +1,606 @@
+{
+    "success": true,
+    "trainingUnits": [
+        {
+            "Id": 6,
+            "UniqueId": "145f1fa5-9ff6-4ecf-a729-e3ffdefeaf61",
+            "TypeLabel": "Document",
+            "Title": "David Designs",
+            "ReferenceNumber": null,
+            "Tags": [],
+            "TagsCount": 0,
+            "RolesRequiredToComplete": [],
+            "RolesRequiredCount": 0,
+            "Completed": null,
+            "CompletedDate": null,
+            "Due": null,
+            "DueDate": null,
+            "Owner": {
+                "Name": "David Flores",
+                "UserId": 1069,
+                "AvatarId": 1,
+                "AvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=1",
+                "IsUserDeleted": false,
+                "Email": "David.Flores@Nintex.com",
+                "IsRemoveable": false,
+                "IsRemoved": false,
+                "Label": null,
+                "DisplayOrder": 0,
+                "RoleLabel": null
+            },
+            "OwnerName": "David Flores",
+            "TrainingStatus": 0,
+            "TrainingCounts": [
+                {
+                    "Value": 1,
+                    "Colour": "1",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                },
+                {
+                    "Value": 2,
+                    "Colour": "2",
+                    "Label": "",
+                    "Count": 1,
+                    "Type": 1
+                },
+                {
+                    "Value": 5,
+                    "Colour": "3",
+                    "Label": "",
+                    "Count": 1,
+                    "Type": 1
+                }
+            ],
+            "EvidenceDocument": null,
+            "LocaliserService": {},
+            "IsSaved": false
+        },
+        {
+            "Id": 84,
+            "UniqueId": "894713de-87e4-481f-a925-ca8584c039ea",
+            "TypeLabel": "Online Resource",
+            "Title": "Example Tag Training",
+            "ReferenceNumber": null,
+            "Tags": [],
+            "TagsCount": 0,
+            "RolesRequiredToComplete": [],
+            "RolesRequiredCount": 0,
+            "Completed": null,
+            "CompletedDate": null,
+            "Due": null,
+            "DueDate": null,
+            "Owner": {
+                "Name": "Jonathan Butler",
+                "UserId": 1053,
+                "AvatarId": 1,
+                "AvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=1",
+                "IsUserDeleted": false,
+                "Email": "jonathan.butler@nintex.com",
+                "IsRemoveable": false,
+                "IsRemoved": false,
+                "Label": null,
+                "DisplayOrder": 0,
+                "RoleLabel": null
+            },
+            "OwnerName": "Jonathan Butler",
+            "TrainingStatus": 0,
+            "TrainingCounts": [
+                {
+                    "Value": 1,
+                    "Colour": "1",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                },
+                {
+                    "Value": 2,
+                    "Colour": "2",
+                    "Label": "",
+                    "Count": 2,
+                    "Type": 1
+                },
+                {
+                    "Value": 5,
+                    "Colour": "3",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                }
+            ],
+            "EvidenceDocument": null,
+            "LocaliserService": {},
+            "IsSaved": false
+        },
+        {
+            "Id": 1,
+            "UniqueId": "4c48b68c-5d75-4946-a15f-b3699340ae35",
+            "TypeLabel": "Course",
+            "Title": "Example Training",
+            "ReferenceNumber": "1234",
+            "Tags": [],
+            "TagsCount": 0,
+            "RolesRequiredToComplete": [],
+            "RolesRequiredCount": 0,
+            "Completed": null,
+            "CompletedDate": null,
+            "Due": null,
+            "DueDate": null,
+            "Owner": {
+                "Name": "Jonathan Butler",
+                "UserId": 1053,
+                "AvatarId": 1,
+                "AvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=1",
+                "IsUserDeleted": false,
+                "Email": "jonathan.butler@nintex.com",
+                "IsRemoveable": false,
+                "IsRemoved": false,
+                "Label": null,
+                "DisplayOrder": 0,
+                "RoleLabel": null
+            },
+            "OwnerName": "Jonathan Butler",
+            "TrainingStatus": 0,
+            "TrainingCounts": [
+                {
+                    "Value": 1,
+                    "Colour": "1",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                },
+                {
+                    "Value": 2,
+                    "Colour": "2",
+                    "Label": "",
+                    "Count": 3,
+                    "Type": 1
+                },
+                {
+                    "Value": 5,
+                    "Colour": "3",
+                    "Label": "",
+                    "Count": 3,
+                    "Type": 1
+                }
+            ],
+            "EvidenceDocument": null,
+            "LocaliserService": {},
+            "IsSaved": false
+        },
+        {
+            "Id": 5,
+            "UniqueId": "8a284453-d2d6-4dd1-b667-caebf67f63a4",
+            "TypeLabel": "Course",
+            "Title": "onboarding",
+            "ReferenceNumber": null,
+            "Tags": [],
+            "TagsCount": 0,
+            "RolesRequiredToComplete": [
+                {
+                    "Id": 911,
+                    "Value": "Account Manager"
+                }
+            ],
+            "RolesRequiredCount": 1,
+            "Completed": null,
+            "CompletedDate": null,
+            "Due": null,
+            "DueDate": null,
+            "Owner": {
+                "Name": "Lauren Graven",
+                "UserId": 1062,
+                "AvatarId": 77,
+                "AvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=77",
+                "IsUserDeleted": false,
+                "Email": "lauren.graven@nintex.com",
+                "IsRemoveable": false,
+                "IsRemoved": false,
+                "Label": null,
+                "DisplayOrder": 0,
+                "RoleLabel": null
+            },
+            "OwnerName": "Lauren Graven",
+            "TrainingStatus": 0,
+            "TrainingCounts": [
+                {
+                    "Value": 1,
+                    "Colour": "1",
+                    "Label": "",
+                    "Count": 2,
+                    "Type": 1
+                },
+                {
+                    "Value": 2,
+                    "Colour": "2",
+                    "Label": "",
+                    "Count": 6,
+                    "Type": 1
+                },
+                {
+                    "Value": 5,
+                    "Colour": "3",
+                    "Label": "",
+                    "Count": 2,
+                    "Type": 1
+                }
+            ],
+            "EvidenceDocument": null,
+            "LocaliserService": {},
+            "IsSaved": false
+        },
+        {
+            "Id": 7,
+            "UniqueId": "9d3bc938-af8a-4f6f-adcb-a9f1fab68e19",
+            "TypeLabel": "Course",
+            "Title": "Supervisor discovery",
+            "ReferenceNumber": "123123",
+            "Tags": [],
+            "TagsCount": 0,
+            "RolesRequiredToComplete": [],
+            "RolesRequiredCount": 0,
+            "Completed": null,
+            "CompletedDate": null,
+            "Due": null,
+            "DueDate": null,
+            "Owner": {
+                "Name": "Hugo Yang",
+                "UserId": 28,
+                "AvatarId": 63,
+                "AvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=63",
+                "IsUserDeleted": false,
+                "Email": "promapp-noreply@promapp.com.au",
+                "IsRemoveable": false,
+                "IsRemoved": false,
+                "Label": null,
+                "DisplayOrder": 0,
+                "RoleLabel": null
+            },
+            "OwnerName": "Hugo Yang",
+            "TrainingStatus": 0,
+            "TrainingCounts": [
+                {
+                    "Value": 1,
+                    "Colour": "1",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                },
+                {
+                    "Value": 2,
+                    "Colour": "2",
+                    "Label": "",
+                    "Count": 1,
+                    "Type": 1
+                },
+                {
+                    "Value": 5,
+                    "Colour": "3",
+                    "Label": "",
+                    "Count": 1,
+                    "Type": 1
+                }
+            ],
+            "EvidenceDocument": null,
+            "LocaliserService": {},
+            "IsSaved": false
+        },
+        {
+            "Id": 9,
+            "UniqueId": "354c7577-f580-4dc2-a402-759a602db30b",
+            "TypeLabel": "Course",
+            "Title": "test 22",
+            "ReferenceNumber": null,
+            "Tags": [],
+            "TagsCount": 0,
+            "RolesRequiredToComplete": [],
+            "RolesRequiredCount": 0,
+            "Completed": null,
+            "CompletedDate": null,
+            "Due": null,
+            "DueDate": null,
+            "Owner": {
+                "Name": "Lauren Graven",
+                "UserId": 1062,
+                "AvatarId": 77,
+                "AvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=77",
+                "IsUserDeleted": false,
+                "Email": "lauren.graven@nintex.com",
+                "IsRemoveable": false,
+                "IsRemoved": false,
+                "Label": null,
+                "DisplayOrder": 0,
+                "RoleLabel": null
+            },
+            "OwnerName": "Lauren Graven",
+            "TrainingStatus": 0,
+            "TrainingCounts": [
+                {
+                    "Value": 1,
+                    "Colour": "1",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                },
+                {
+                    "Value": 2,
+                    "Colour": "2",
+                    "Label": "",
+                    "Count": 2,
+                    "Type": 1
+                },
+                {
+                    "Value": 5,
+                    "Colour": "3",
+                    "Label": "",
+                    "Count": 2,
+                    "Type": 1
+                }
+            ],
+            "EvidenceDocument": null,
+            "LocaliserService": {},
+            "IsSaved": false
+        },
+        {
+            "Id": 86,
+            "UniqueId": "ae28cdf2-704f-4039-8dc6-98ce5bfc3976",
+            "TypeLabel": "Course",
+            "Title": "test creation unit",
+            "ReferenceNumber": "123123123",
+            "Tags": [],
+            "TagsCount": 0,
+            "RolesRequiredToComplete": [],
+            "RolesRequiredCount": 0,
+            "Completed": null,
+            "CompletedDate": null,
+            "Due": null,
+            "DueDate": null,
+            "Owner": {
+                "Name": "Jonathan Butler",
+                "UserId": 1053,
+                "AvatarId": 1,
+                "AvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=1",
+                "IsUserDeleted": false,
+                "Email": "jonathan.butler@nintex.com",
+                "IsRemoveable": false,
+                "IsRemoved": false,
+                "Label": null,
+                "DisplayOrder": 0,
+                "RoleLabel": null
+            },
+            "OwnerName": "Jonathan Butler",
+            "TrainingStatus": 0,
+            "TrainingCounts": [
+                {
+                    "Value": 1,
+                    "Colour": "1",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                },
+                {
+                    "Value": 2,
+                    "Colour": "2",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                },
+                {
+                    "Value": 5,
+                    "Colour": "3",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                }
+            ],
+            "EvidenceDocument": null,
+            "LocaliserService": {},
+            "IsSaved": false
+        },
+        {
+            "Id": 87,
+            "UniqueId": "e7d22066-08af-4105-b555-456f2ce196bd",
+            "TypeLabel": "Course",
+            "Title": "test creation unit remote",
+            "ReferenceNumber": null,
+            "Tags": [],
+            "TagsCount": 0,
+            "RolesRequiredToComplete": [],
+            "RolesRequiredCount": 0,
+            "Completed": null,
+            "CompletedDate": null,
+            "Due": null,
+            "DueDate": null,
+            "Owner": {
+                "Name": "Jonathan Butler",
+                "UserId": 1053,
+                "AvatarId": 1,
+                "AvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=1",
+                "IsUserDeleted": false,
+                "Email": "jonathan.butler@nintex.com",
+                "IsRemoveable": false,
+                "IsRemoved": false,
+                "Label": null,
+                "DisplayOrder": 0,
+                "RoleLabel": null
+            },
+            "OwnerName": "Jonathan Butler",
+            "TrainingStatus": 0,
+            "TrainingCounts": [
+                {
+                    "Value": 1,
+                    "Colour": "1",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                },
+                {
+                    "Value": 2,
+                    "Colour": "2",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                },
+                {
+                    "Value": 5,
+                    "Colour": "3",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                }
+            ],
+            "EvidenceDocument": null,
+            "LocaliserService": {},
+            "IsSaved": false
+        },
+        {
+            "Id": 11,
+            "UniqueId": "c6a293fb-9580-4f5d-8199-0a623e39fe1f",
+            "TypeLabel": "Online Resource",
+            "Title": "Testing for dashboards",
+            "ReferenceNumber": null,
+            "Tags": [],
+            "TagsCount": 0,
+            "RolesRequiredToComplete": [
+                {
+                    "Id": 911,
+                    "Value": "Account Manager"
+                }
+            ],
+            "RolesRequiredCount": 1,
+            "Completed": null,
+            "CompletedDate": null,
+            "Due": null,
+            "DueDate": null,
+            "Owner": {
+                "Name": "Lauren Graven",
+                "UserId": 1062,
+                "AvatarId": 77,
+                "AvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=77",
+                "IsUserDeleted": false,
+                "Email": "lauren.graven@nintex.com",
+                "IsRemoveable": false,
+                "IsRemoved": false,
+                "Label": null,
+                "DisplayOrder": 0,
+                "RoleLabel": null
+            },
+            "OwnerName": "Lauren Graven",
+            "TrainingStatus": 0,
+            "TrainingCounts": [
+                {
+                    "Value": 1,
+                    "Colour": "1",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                },
+                {
+                    "Value": 2,
+                    "Colour": "2",
+                    "Label": "",
+                    "Count": 6,
+                    "Type": 1
+                },
+                {
+                    "Value": 5,
+                    "Colour": "3",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                }
+            ],
+            "EvidenceDocument": null,
+            "LocaliserService": {},
+            "IsSaved": false
+        },
+        {
+            "Id": 8,
+            "UniqueId": "36ba0a35-16e2-4cd6-955a-02fac9de8082",
+            "TypeLabel": "Document",
+            "Title": "testing for notifications",
+            "ReferenceNumber": null,
+            "Tags": [],
+            "TagsCount": 0,
+            "RolesRequiredToComplete": [
+                {
+                    "Id": 911,
+                    "Value": "Account Manager"
+                }
+            ],
+            "RolesRequiredCount": 1,
+            "Completed": null,
+            "CompletedDate": null,
+            "Due": null,
+            "DueDate": null,
+            "Owner": {
+                "Name": "Lauren Graven",
+                "UserId": 1062,
+                "AvatarId": 77,
+                "AvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=77",
+                "IsUserDeleted": false,
+                "Email": "lauren.graven@nintex.com",
+                "IsRemoveable": false,
+                "IsRemoved": false,
+                "Label": null,
+                "DisplayOrder": 0,
+                "RoleLabel": null
+            },
+            "OwnerName": "Lauren Graven",
+            "TrainingStatus": 0,
+            "TrainingCounts": [
+                {
+                    "Value": 1,
+                    "Colour": "1",
+                    "Label": "",
+                    "Count": 0,
+                    "Type": 1
+                },
+                {
+                    "Value": 2,
+                    "Colour": "2",
+                    "Label": "",
+                    "Count": 7,
+                    "Type": 1
+                },
+                {
+                    "Value": 5,
+                    "Colour": "3",
+                    "Label": "",
+                    "Count": 1,
+                    "Type": 1
+                }
+            ],
+            "EvidenceDocument": null,
+            "LocaliserService": {},
+            "IsSaved": false
+        }
+    ],
+    "paging": {
+        "PageCount": 1,
+        "TotalItemCount": 10,
+        "PageNumber": 1,
+        "PageSize": 20,
+        "HasPreviousPage": false,
+        "HasNextPage": false,
+        "IsFirstPage": true,
+        "IsLastPage": true,
+        "FirstItemOnPage": 1,
+        "LastItemOnPage": 10
+    },
+    "filter": {
+        "ListFilter": 0,
+        "TypeFilter": [],
+        "RoleFilter": [],
+        "TrainingUnitByAssessmentTypeFilter": null,
+        "TrainingDue": 0,
+        "TeamAndLocationFilter": [],
+        "TeamFilter": [],
+        "LocationFilter": [],
+        "CompetenceFilter": [],
+        "StatusFilter": 0,
+        "AlphabeticCriteria": null,
+        "SearchCriteria": ""
+    }
+}

@@ -1,0 +1,115 @@
+{
+    "success": true,
+    "statusSummary": {
+        "SummaryInfos": [
+            {
+                "Value": 1,
+                "Colour": "1",
+                "Label": "Trained",
+                "Count": 0,
+                "Type": 1
+            },
+            {
+                "Value": 2,
+                "Colour": "2",
+                "Label": "Untrained",
+                "Count": 1,
+                "Type": 1
+            },
+            {
+                "Value": 4,
+                "Colour": "3",
+                "Label": "Expired",
+                "Count": 0,
+                "Type": 1
+            },
+            {
+                "Value": 3,
+                "Colour": "3",
+                "Label": "Overdue",
+                "Count": 1,
+                "Type": 1
+            }
+        ]
+    },
+    "paging": {
+        "PageCount": 1,
+        "TotalItemCount": 1,
+        "PageNumber": 1,
+        "PageSize": 200,
+        "HasPreviousPage": false,
+        "HasNextPage": false,
+        "IsFirstPage": true,
+        "IsLastPage": true,
+        "FirstItemOnPage": 1,
+        "LastItemOnPage": 1
+    },
+    "trainees": [
+        {
+            "UserId": 35,
+            "UserFullName": "Timothy Lee",
+            "UserFirstName": "Timothy",
+            "UserLastName": "Lee",
+            "UserAvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=67",
+            "Roles": [
+                {
+                    "Id": 3,
+                    "Value": "ALL STAFF"
+                }
+            ],
+            "FirstScheduledEventId": 120,
+            "LastTrainedDate": "Untrained",
+            "ScheduledTrainingDate": "05 Mar 2025",
+            "IsScheduled": true,
+            "Status": 3,
+            "Competence": null,
+            "EvidenceDocument": null,
+            "EvidenceNotFoundMessage": "-",
+            "StatusValue": 3,
+            "StatusLabel": "Overdue",
+            "Supervisor": "Jonathan Butler",
+            "ProviderLocation": "lauren ",
+            "SupervisorAvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=1",
+            "SupervisorId": 1053,
+            "ExpiryDate": "Not applicable",
+            "LocaliserService": {},
+            "IsSaved": false
+        }
+    ],
+    "supervisors": [
+        {
+            "value": 1053,
+            "name": "Jonathan Butler"
+        }
+    ],
+    "filter": {
+        "RoleFilter": [],
+        "TeamAndLocationFilter": [],
+        "TeamFilter": [],
+        "LocationFilter": [],
+        "CompetenceFilter": [],
+        "StatusFilter": 0,
+        "SupervisorFilter": 0,
+        "AlphabeticCriteria": null,
+        "SearchCriteria": ""
+    },
+    "orderDefinition": {
+        "ListType": null,
+        "OverrideWithDefault": false,
+        "IsDescending": true,
+        "OrderProperty": null,
+        "OrderQueryString": ""
+    },
+    "teamAndLocationTags": [
+        {
+            "Id": 163,
+            "Value": "Product",
+            "TagFamilyName": "Team"
+        },
+        {
+            "Id": 164,
+            "Value": "Seattle",
+            "TagFamilyName": "Location"
+        }
+    ]
+}

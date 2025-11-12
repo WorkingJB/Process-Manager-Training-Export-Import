@@ -1,0 +1,91 @@
+{
+    "success": true,
+    "trainingUnit": {
+        "Id": 6,
+        "UniqueId": "145f1fa5-9ff6-4ecf-a729-e3ffdefeaf61",
+        "ReferenceNumber": null,
+        "Title": "David Designs",
+        "TypeLabel": "Document",
+        "Type": 3,
+        "Description": "testing for Dashboard",
+        "OwnerId": 1069,
+        "Owner": {
+            "Name": "David Flores",
+            "UserId": 1069,
+            "AvatarId": 1,
+            "AvatarUrl": "/93555a16ceb24f139a6e8a40618d3f8b/Profile/Avatar.aspx?id=1",
+            "IsUserDeleted": false,
+            "Email": "David.Flores@Nintex.com",
+            "IsRemoveable": false,
+            "IsRemoved": false,
+            "Label": null,
+            "DisplayOrder": 0,
+            "RoleLabel": null
+        },
+        "DoesExpire": false,
+        "RenewCycleLabel": "Once Only",
+        "RenewCycle": 1,
+        "RenewalPeriod": 0,
+        "RequiredForInduction": false,
+        "Location": null,
+        "Provider": "lauren ",
+        "AssessmentMethod": 1,
+        "AssessmentMethodLabel": "Self Sign Off",
+        "EvidenceRequired": false,
+        "LinkedProcesses": [
+            {
+                "Id": 664,
+                "Title": "Example for Capture (PM) :: Parental Leave",
+                "Url": "/93555a16ceb24f139a6e8a40618d3f8b/Process?uniqueId=e18ca026-e671-4e88-9d3c-1773f08c7b81"
+            }
+        ],
+        "LinkedDocuments": [],
+        "RolesRequiredToComplete": [],
+        "OtherResources": [],
+        "Tags": [],
+        "CanEdit": true,
+        "CanSchedule": true,
+        "CanSeeFullOverview": true,
+        "LocaliserService": {},
+        "IsSaved": false
+    },
+    "statusSummary": {
+        "SummaryInfos": [
+            {
+                "Value": 1,
+                "Colour": "1",
+                "Label": "Trained",
+                "Count": 0,
+                "Type": 1
+            },
+            {
+                "Value": 2,
+                "Colour": "2",
+                "Label": "Untrained",
+                "Count": 1,
+                "Type": 1
+            },
+            {
+                "Value": 4,
+                "Colour": "3",
+                "Label": "Expired",
+                "Count": 0,
+                "Type": 1
+            },
+            {
+                "Value": 3,
+                "Colour": "3",
+                "Label": "Overdue",
+                "Count": 1,
+                "Type": 1
+            }
+        ]
+    },
+    "cogTools": [
+        {
+            "Type": 11,
+            "Label": "Delete Training Unit",
+            "SubTools": []
+        }
+    ]
+}

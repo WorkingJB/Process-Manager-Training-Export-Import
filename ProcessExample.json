@@ -1,0 +1,192 @@
+{
+    "processJson": {
+        "Id": 1511,
+        "UniqueId": "3be24da1-4e95-4edb-b94c-f39e14c61081",
+        "Name": "Review test",
+        "StateId": 3,
+        "Objective": "Test",
+        "OwnerId": 1053,
+        "ExpertId": 1053,
+        "GroupId": 661,
+        "GroupUniqueId": "295b50e5-82c6-46bb-a770-a60f5643630f",
+        "UseDynamicMapperImage": true,
+        "ReferenceNo": "",
+        "IsTextModeOn": false,
+        "IsPolicyModeOn": false,
+        "Background": "",
+        "Expert": "Jonathan Butler",
+        "Owner": "Jonathan Butler",
+        "Group": "Crestan",
+        "State": "Draft",
+        "AnnualVolume": null,
+        "ProcessProcedures": {
+            "Activity": [
+                {
+                    "Id": -1,
+                    "UniqueId": "50521bdb-a724-43f6-8b84-362d3112763a",
+                    "ParallelGroupingRef": null,
+                    "LinkedDecisionUniqueId": null,
+                    "Number": "1.0",
+                    "Order": 0,
+                    "ProcessProcedureType": 7,
+                    "IsShared": false,
+                    "Text": "Test",
+                    "Attachment": null,
+                    "DocumentId": null,
+                    "DocumentUniqueId": null,
+                    "NetworkFileName": null,
+                    "DocumentLocationTypeId": 0,
+                    "IsAutomationRequested": null,
+                    "LinkedProcessId": null,
+                    "EmbeddedLinkedProcessId": null,
+                    "LinkedProcessUniqueId": null,
+                    "LinkedProcessStateId": null,
+                    "LinkedProcessName": null,
+                    "LinkedProcessDisplayName": null,
+                    "LinkedProcessGroupId": null,
+                    "LinkedProcessGroupName": null,
+                    "LinkedProcessGroupUniqueId": null,
+                    "AssociatedWorkflowIds": null,
+                    "WorkflowId": null,
+                    "DecisionLinkType": 0,
+                    "DecisionLinkIsYes": false,
+                    "ChildProcessProcedures": null,
+                    "Ownerships": {
+                        "Role": [
+                            {
+                                "Id": 2,
+                                "Name": "UNASSIGNED",
+                                "IsVirtual": false,
+                                "Order": null
+                            }
+                        ],
+                        "DecisionOrphanRole": null,
+                        "Tag": null,
+                        "DecisionOrphanTag": null
+                    },
+                    "ProcessProcedureTimeframe": {
+                        "TimeframeTypeId": -1,
+                        "TimeframeType": "Normal",
+                        "CycleTimeDisplay": "-",
+                        "LeadTimeDisplay": "-",
+                        "ProportionOfTimeInTotal": 1.0,
+                        "ProcessProcedureCost": null,
+                        "AverageCostPerHour": null
+                    },
+                    "RiskControls": {
+                        "RiskControl": []
+                    }
+                }
+            ],
+            "Decision": [],
+            "ProcessLink": [],
+            "OrphanProcessLink": [],
+            "ProcessGroupLink": [],
+            "OrphanProcessGroupLink": [],
+            "EmbeddedProcessLink": [],
+            "OrphanEmbeddedProcessLink": []
+        },
+        "SearchKeywords": null,
+        "ProcessTags": null,
+        "Inputs": null,
+        "Outputs": null,
+        "Triggers": null,
+        "Targets": null,
+        "Stakeholders": null,
+        "LinkedStakeholders": null,
+        "SystemStakeholders": {
+            "User": [],
+            "Role": [],
+            "Responsibility": null
+        },
+        "ApprovalStakeholders": {
+            "User": [],
+            "Role": [],
+            "Responsibility": null
+        },
+        "PublishingStakeholders": {
+            "User": [],
+            "Role": [],
+            "Responsibility": null
+        },
+        "DraftWorkflowId": null,
+        "AutomationRequestedByUserId": null,
+        "PublishedWorkflowId": null,
+        "RiskManagers": {
+            "User": [],
+            "Role": [],
+            "Responsibility": null
+        },
+        "Approvals": null,
+        "ReplacementMapImage": null,
+        "Version": "0.3",
+        "PromappVersion": "0.0.0.0",
+        "ProcessRevisionEditId": 8254,
+        "ProcessRevisionStateId": 1,
+        "ProcessGroupItems": {
+            "ProcessGroup": {
+                "Id": 661,
+                "UniqueId": "295b50e5-82c6-46bb-a770-a60f5643630f",
+                "Name": "Crestan"
+            },
+            "ProcessGroupShortcut": null
+        },
+        "Timeframe": {
+            "TotalCycleTimeDisplay": "-",
+            "TotalLeadTimeDisplay": "-",
+            "ProcessTotalCost": 0.0,
+            "TimeframeHoursPerDay": null,
+            "TimeframeDaysPerWeek": null,
+            "TimeframeVariance": null
+        },
+        "AutomationSpecialists": {
+            "User": [],
+            "Role": [],
+            "Responsibility": null
+        },
+        "ProcessApproval": null,
+        "Metadata": null
+    },
+    "processActions": {
+        "CanPublish": false,
+        "CanPublishAfterEdit": false,
+        "CanSubmitForApproval": true,
+        "CanSubmitForApprovalAfterEdit": true,
+        "CanQuickSave": true,
+        "CanArchive": false,
+        "CanSelectPolicyMode": true,
+        "CanPublishWithoutComment": true,
+        "CanSuppressPublishChangeNotification": false,
+        "CanSave": true,
+        "CanSeeAutomation": true,
+        "CanEditAutomation": true,
+        "CanSeeSystemTags": true,
+        "CanSeeRisks": true,
+        "CanEditProcessApprovers": true,
+        "CanAddDecision": true,
+        "CanEditTimeframes": true,
+        "CanEditCosts": true,
+        "CanViewUsersInRole": true
+    },
+    "processWarnings": [],
+    "configuration": {
+        "CustomCycleTimeLabel": "Active Time",
+        "CustomLeadTimeLabel": "Wait Time",
+        "CustomStandardVariationLabel": "STANDARD",
+        "NintexWorkflowIntegrationBaseUrl": "https://dmo-wus-nwi.promapp.io",
+        "DocumentLinkUrlRegex": "",
+        "AutomatedSystemTagId": 49,
+        "IsProcessReferenceNoEnabled": true,
+        "PawModeEnabled": true,
+        "ResilienceApiCallDelaySec": 3,
+        "ResilienceApiCallAttemptsCount": 5,
+        "IsIndexSearchForProcessCreationEnabled": true,
+        "IsProcessProcedureReactEnabled": true,
+        "IsProcessMapReactEnabled": true,
+        "EnableProcessLeanTags": true,
+        "CustomLeanTagLabel": "Processes"
+    },
+    "variationSetData": null,
+    "sharedProceduresSuggestedChanges": null,
+    "changedSharedProcessProcedures": null
+}

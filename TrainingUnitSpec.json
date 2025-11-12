@@ -1,0 +1,1010 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Training Export / Import",
+    "version": "1.0.0",
+    "description": ""
+  },
+  "servers": [
+    {
+      "url": "{{baseUrl}}"
+    },
+    {
+      "url": "api.promapp.com"
+    }
+  ],
+  "paths": {
+    "/{automationTenant}/oauth2/token": {
+      "post": {
+        "summary": "access_token",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "access_token",
+            "headers": {
+              "Date": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Expose-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Encoding": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Expires": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "Pragma": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Strict-Transport-Security": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Frame-Options": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Request-Context": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-XSS-Protection": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "x-azure-ref": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-Cache": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Accept-Ranges": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "token_type": {
+                      "type": "string"
+                    },
+                    "expires_in": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "automationTenant",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/{automationTenant}/Api/v1/Processes/{processUniqueId}": {
+      "get": {
+        "summary": "ProcessDetails",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "x-requested-with",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "__RequestVerificationToken",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ProcessDetailsSuccess",
+            "headers": {
+              "Date": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Expose-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Encoding": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Expires": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "Pragma": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Strict-Transport-Security": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Frame-Options": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Request-Context": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-XSS-Protection": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "x-azure-ref": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-Cache": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Accept-Ranges": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "processJson": {
+                      "type": "object",
+                      "properties": {
+                        "Id": {
+                          "type": "integer"
+                        },
+                        "UniqueId": {
+                          "type": "string"
+                        },
+                        "Name": {
+                          "type": "string"
+                        },
+                        "StateId": {
+                          "type": "integer"
+                        },
+                        "Objective": {
+                          "type": "string"
+                        },
+                        "OwnerId": {
+                          "type": "integer"
+                        },
+                        "ExpertId": {
+                          "type": "integer"
+                        },
+                        "GroupId": {
+                          "type": "integer"
+                        },
+                        "GroupUniqueId": {
+                          "type": "string"
+                        },
+                        "UseDynamicMapperImage": {
+                          "type": "boolean"
+                        },
+                        "ReferenceNo": {
+                          "type": "string"
+                        },
+                        "IsTextModeOn": {
+                          "type": "boolean"
+                        },
+                        "IsPolicyModeOn": {
+                          "type": "boolean"
+                        },
+                        "Background": {
+                          "type": "string"
+                        },
+                        "Expert": {
+                          "type": "string"
+                        },
+                        "Owner": {
+                          "type": "string"
+                        },
+                        "Group": {
+                          "type": "string"
+                        },
+                        "State": {
+                          "type": "string"
+                        },
+                        "AnnualVolume": {
+                          "nullable": true
+                        },
+                        "ProcessProcedures": {
+                          "type": "object",
+                          "properties": {
+                            "Activity": {
+                              "type": "array",
+                              "items": {}
+                            },
+                            "Decision": {
+                              "type": "array",
+                              "items": {}
+                            },
+                            "ProcessLink": {
+                              "type": "array",
+                              "items": {}
+                            },
+                            "OrphanProcessLink": {
+                              "type": "array",
+                              "items": {}
+                            },
+                            "ProcessGroupLink": {
+                              "type": "array",
+                              "items": {}
+                            },
+                            "OrphanProcessGroupLink": {
+                              "type": "array",
+                              "items": {}
+                            },
+                            "EmbeddedProcessLink": {
+                              "type": "array",
+                              "items": {}
+                            },
+                            "OrphanEmbeddedProcessLink": {
+                              "type": "array",
+                              "items": {}
+                            }
+                          }
+                        },
+                        "SearchKeywords": {
+                          "nullable": true
+                        },
+                        "Inputs": {
+                          "nullable": true
+                        },
+                        "Outputs": {
+                          "nullable": true
+                        },
+                        "Triggers": {
+                          "nullable": true
+                        },
+                        "Targets": {
+                          "nullable": true
+                        },
+                        "Stakeholders": {
+                          "nullable": true
+                        },
+                        "LinkedStakeholders": {
+                          "nullable": true
+                        },
+                        "SystemStakeholders": {
+                          "type": "object",
+                          "properties": {
+                            "User": {
+                              "type": "array",
+                              "items": {}
+                            },
+                            "Role": {
+                              "type": "array",
+                              "items": {}
+                            },
+                            "Responsibility": {
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "ApprovalStakeholders": {
+                          "type": "object",
+                          "properties": {
+                            "User": {
+                              "nullable": true
+                            },
+                            "Role": {
+                              "nullable": true
+                            },
+                            "Responsibility": {
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "PublishingStakeholders": {
+                          "type": "object",
+                          "properties": {
+                            "User": {
+                              "nullable": true
+                            },
+                            "Role": {
+                              "nullable": true
+                            },
+                            "Responsibility": {
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "DraftWorkflowId": {
+                          "nullable": true
+                        },
+                        "AutomationRequestedByUserId": {
+                          "nullable": true
+                        },
+                        "PublishedWorkflowId": {
+                          "nullable": true
+                        },
+                        "RiskManagers": {
+                          "type": "object",
+                          "properties": {
+                            "User": {
+                              "nullable": true
+                            },
+                            "Role": {
+                              "nullable": true
+                            },
+                            "Responsibility": {
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "Approvals": {
+                          "nullable": true
+                        },
+                        "ReplacementMapImage": {
+                          "nullable": true
+                        },
+                        "Version": {
+                          "type": "string"
+                        },
+                        "PromappVersion": {
+                          "type": "string",
+                          "format": "ip-address"
+                        },
+                        "ProcessRevisionEditId": {
+                          "type": "integer"
+                        },
+                        "ProcessRevisionStateId": {
+                          "type": "integer"
+                        },
+                        "ProcessGroupItems": {
+                          "type": "object",
+                          "properties": {
+                            "ProcessGroup": {
+                              "type": "object",
+                              "properties": {
+                                "Id": {
+                                  "type": "integer"
+                                },
+                                "UniqueId": {
+                                  "type": "string"
+                                },
+                                "Name": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "ProcessGroupShortcut": {
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "Timeframe": {
+                          "type": "object",
+                          "properties": {
+                            "TotalCycleTimeDisplay": {
+                              "type": "string"
+                            },
+                            "TotalLeadTimeDisplay": {
+                              "type": "string"
+                            },
+                            "ProcessTotalCost": {
+                              "nullable": true
+                            },
+                            "TimeframeHoursPerDay": {
+                              "nullable": true
+                            },
+                            "TimeframeDaysPerWeek": {
+                              "nullable": true
+                            },
+                            "TimeframeVariance": {
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "AutomationSpecialists": {
+                          "type": "object",
+                          "properties": {
+                            "User": {
+                              "nullable": true
+                            },
+                            "Role": {
+                              "nullable": true
+                            },
+                            "Responsibility": {
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "ProcessApproval": {
+                          "nullable": true
+                        },
+                        "Metadata": {
+                          "nullable": true
+                        }
+                      }
+                    },
+                    "processActions": {
+                      "type": "object",
+                      "properties": {
+                        "CanPublish": {
+                          "type": "boolean"
+                        },
+                        "CanPublishAfterEdit": {
+                          "type": "boolean"
+                        },
+                        "CanSubmitForApproval": {
+                          "type": "boolean"
+                        },
+                        "CanSubmitForApprovalAfterEdit": {
+                          "type": "boolean"
+                        },
+                        "CanQuickSave": {
+                          "type": "boolean"
+                        },
+                        "CanArchive": {
+                          "type": "boolean"
+                        },
+                        "CanSelectPolicyMode": {
+                          "type": "boolean"
+                        },
+                        "CanPublishWithoutComment": {
+                          "type": "boolean"
+                        },
+                        "CanSuppressPublishChangeNotification": {
+                          "type": "boolean"
+                        },
+                        "CanSave": {
+                          "type": "boolean"
+                        },
+                        "CanSeeAutomation": {
+                          "type": "boolean"
+                        },
+                        "CanEditAutomation": {
+                          "type": "boolean"
+                        },
+                        "CanSeeSystemTags": {
+                          "type": "boolean"
+                        },
+                        "CanSeeRisks": {
+                          "type": "boolean"
+                        },
+                        "CanEditProcessApprovers": {
+                          "type": "boolean"
+                        },
+                        "CanAddDecision": {
+                          "type": "boolean"
+                        },
+                        "CanEditTimeframes": {
+                          "type": "boolean"
+                        },
+                        "CanEditCosts": {
+                          "type": "boolean"
+                        },
+                        "CanViewUsersInRole": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "processWarnings": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "configuration": {
+                      "type": "object",
+                      "properties": {
+                        "CustomCycleTimeLabel": {
+                          "type": "string"
+                        },
+                        "CustomLeadTimeLabel": {
+                          "type": "string"
+                        },
+                        "CustomStandardVariationLabel": {
+                          "type": "string"
+                        },
+                        "NintexWorkflowIntegrationBaseUrl": {
+                          "nullable": true
+                        },
+                        "DocumentLinkUrlRegex": {
+                          "type": "string"
+                        },
+                        "AutomatedSystemTagId": {
+                          "nullable": true
+                        },
+                        "IsProcessReferenceNoEnabled": {
+                          "type": "boolean"
+                        },
+                        "PawModeEnabled": {
+                          "type": "boolean"
+                        },
+                        "ResilienceApiCallDelaySec": {
+                          "type": "integer"
+                        },
+                        "ResilienceApiCallAttemptsCount": {
+                          "type": "integer"
+                        },
+                        "IsIndexSearchForProcessCreationEnabled": {
+                          "type": "boolean"
+                        },
+                        "IsProcessProcedureReactEnabled": {
+                          "type": "boolean"
+                        },
+                        "IsProcessMapReactEnabled": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "variationSetData": {
+                      "nullable": true
+                    },
+                    "sharedProceduresSuggestedChanges": {
+                      "nullable": true
+                    },
+                    "changedSharedProcessProcedures": {
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "automationTenant",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "processUniqueId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/{automationTenant}/Training/Register/ListPage": {
+      "get": {
+        "summary": "GetAllTrainings",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "deprecated": false
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "deprecated": false
+            }
+          },
+          {
+            "name": "SearchCriteria",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "deprecated": false
+            }
+          },
+          {
+            "name": "ListFilter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "deprecated": false
+            }
+          },
+          {
+            "name": "TrainingDue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "deprecated": false
+            }
+          },
+          {
+            "name": "StatusFilter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "deprecated": false
+            }
+          }
+        ],
+        "responses": {}
+      },
+      "parameters": [
+        {
+          "name": "automationTenant",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/{automationTenant}/Training/Unit/GetTrainingUnitDetails": {
+      "get": {
+        "summary": "GetTrainingUnit",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "unitUniqueId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {}
+      },
+      "parameters": [
+        {
+          "name": "automationTenant",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/{automationTenant}//Training/Trainee": {
+      "get": {
+        "summary": "GetTrainingUnitTrainees",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "unitUniqueId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SearchCriteria",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RoleFilter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "StatusFilter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SupervisorFilter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "CompetenceFilter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IsDescending",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "OrderProperty",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {}
+      },
+      "parameters": [
+        {
+          "name": "automationTenant",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/{automationTenant}/Training/Unit/EditTrainingUnit": {
+      "post": {
+        "summary": "CreateTrainingUnit",
+        "tags": [],
+        "responses": {},
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "AssessmentMethod": {
+                    "type": "integer"
+                  },
+                  "Id": {
+                    "type": "integer"
+                  },
+                  "LinkedDocuments": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "LinkedProcesses": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "Id": {
+                          "type": "integer"
+                        },
+                        "Title": {
+                          "type": "string"
+                        },
+                        "Url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "OtherResources": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "RolesRequiredToComplete": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "Type": {
+                    "type": "string",
+                    "format": "utc-millisec"
+                  },
+                  "ReferenceNumber": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Location": {
+                    "type": "string"
+                  },
+                  "OwnerId": {
+                    "type": "integer"
+                  },
+                  "Provider": {
+                    "type": "string"
+                  },
+                  "RenewCycle": {
+                    "type": "integer"
+                  },
+                  "RenewCycleLabel": {
+                    "type": "string"
+                  },
+                  "RenewalPeriod": {
+                    "type": "integer"
+                  },
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Tags": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "TypeLabel": {
+                    "type": "string"
+                  },
+                  "Owner": {
+                    "type": "object",
+                    "properties": {
+                      "UserId": {
+                        "type": "integer"
+                      },
+                      "Name": {
+                        "type": "string"
+                      },
+                      "AvatarUrl": {
+                        "type": "string"
+                      },
+                      "Email": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "automationTenant",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/api/scim/users": {
+      "get": {
+        "summary": "Get Users",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {}
+      }
+    }
+  }
+}

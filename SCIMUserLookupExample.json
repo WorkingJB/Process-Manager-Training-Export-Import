@@ -1,0 +1,71 @@
+{
+    "itemsPerPage": 200,
+    "startIndex": 1,
+    "Resources": [
+        {
+            "schemas": [
+                "urn:ietf:params:scim:schemas:core:2.0:User"
+            ],
+            "userName": "jonathan.butler@nintex.com",
+            "name": {
+                "formatted": null,
+                "familyName": "Butler",
+                "givenName": "Jonathan",
+                "middleName": null,
+                "honorificPrefix": null,
+                "honorificSuffix": null
+            },
+            "displayName": null,
+            "nickName": null,
+            "profileUrl": null,
+            "title": null,
+            "userType": null,
+            "preferredLanguage": null,
+            "locale": null,
+            "timezone": null,
+            "active": true,
+            "password": null,
+            "emails": [
+                {
+                    "type": null,
+                    "primary": true,
+                    "value": "jonathan.butler@nintex.com",
+                    "display": null,
+                    "$ref": null
+                }
+            ],
+            "photos": null,
+            "entitlements": null,
+            "groups": null,
+            "roles": [
+                {
+                    "type": null,
+                    "primary": false,
+                    "value": "Account Manager",
+                    "display": "Account Manager",
+                    "$ref": null
+                },
+                {
+                    "type": null,
+                    "primary": false,
+                    "value": "[OZ] Business Direct Sales Consultant",
+                    "display": "[OZ] Business Direct Sales Consultant",
+                    "$ref": null
+                }
+            ],
+            "id": "1053",
+            "externalId": null,
+            "meta": {
+                "resourceType": null,
+                "created": "2022-06-27T21:21:23Z",
+                "lastModified": null,
+                "location": null,
+                "version": null
+            }
+        }
+    ],
+    "schemas": [
+        "urn:ietf:params:scim:api:messages:2.0:ListResponse"
+    ],
+    "totalResults": 1
+}
