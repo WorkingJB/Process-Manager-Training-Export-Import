@@ -13,6 +13,9 @@
 [CmdletBinding()]
 param()
 
+# Load required assemblies
+Add-Type -AssemblyName System.Web
+
 # Global variables
 $script:BaseUrl = ""
 $script:TenantName = ""
@@ -309,6 +312,35 @@ function Get-TrainingUnitTrainees {
     return $allTrainees
 }
 
+function Get-ScimUserByName {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$FirstName,
+
+        [Parameter(Mandatory=$true)]
+        [string]$LastName
+    )
+
+    try {
+        # SCIM API filter for finding user by first and last name
+        $filter = "name.givenName eq `"$FirstName`" and name.familyName eq `"$LastName`""
+        $encodedFilter = [System.Web.HttpUtility]::UrlEncode($filter)
+        $endpoint = "api/scim/users?filter=$encodedFilter"
+
+        $response = Invoke-ApiRequest -Endpoint $endpoint -Method Get -UseScimApi $true
+
+        if ($response -and $response.Resources -and $response.Resources.Count -gt 0) {
+            # Return the first matching user's userName
+            return $response.Resources[0].userName
+        }
+
+        return $null
+    } catch {
+        Write-ColorOutput "Warning: Failed to lookup SCIM user for $FirstName $LastName : $($_.Exception.Message)" -Type "Warning"
+        return $null
+    }
+}
+
 #endregion
 
 #region Export Functions
@@ -359,12 +391,17 @@ function Export-TrainingUnits {
             }
         }
 
-        # Get trainees
+        # Get trainees and lookup usernames from SCIM
         $trainees = Get-TrainingUnitTrainees -UnitUniqueId $unit.UniqueId
-        $traineeNames = @()
+        $traineeUsernames = @()
         foreach ($trainee in $trainees) {
-            if ($trainee.UserFullName) {
-                $traineeNames += $trainee.UserFullName
+            if ($trainee.UserFirstName -and $trainee.UserLastName) {
+                $username = Get-ScimUserByName -FirstName $trainee.UserFirstName -LastName $trainee.UserLastName
+                if ($username) {
+                    $traineeUsernames += $username
+                } else {
+                    Write-ColorOutput "Warning: Could not find SCIM username for $($trainee.UserFullName), skipping..." -Type "Warning"
+                }
             }
         }
 
@@ -379,7 +416,7 @@ function Export-TrainingUnits {
             "Linked Processes: Title" = ($linkedProcessTitles -join ";")
             "Linked Processes: uniqueId" = ($linkedProcessUniqueIds -join ";")
             "Linked Documents: Titles" = ($linkedDocTitles -join ";")
-            "Trainees: UserFullNames" = ($traineeNames -join ";")
+            "Trainees: Usernames" = ($traineeUsernames -join ";")
         }
 
         $exportData += $exportObject

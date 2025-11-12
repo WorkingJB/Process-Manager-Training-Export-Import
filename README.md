@@ -43,8 +43,10 @@ The export feature will:
   - Basic information (Title, Description, Type, etc.)
   - Linked processes with titles and IDs
   - Linked documents
-  - Assigned trainees
+  - Assigned trainees (with username lookup via SCIM API)
 - Save data to a CSV file named `TrainingUnits_Export_YYYYMMDD.csv`
+
+**Note:** The export process queries the SCIM API to retrieve usernames (email addresses) for each trainee. This provides a reliable identifier for future trainee assignment during import.
 
 **Export CSV Columns:**
 - Title
@@ -56,7 +58,7 @@ The export feature will:
 - Linked Processes: Title (semicolon-delimited)
 - Linked Processes: uniqueId (semicolon-delimited)
 - Linked Documents: Titles (semicolon-delimited)
-- Trainees: UserFullNames (semicolon-delimited)
+- Trainees: Usernames (semicolon-delimited, retrieved from SCIM API)
 
 ### Import Functionality
 
@@ -187,7 +189,14 @@ For issues or questions:
 
 ## Version History
 
-**v1.2** (Current)
+**v1.3** (Current)
+- **Enhanced Trainee Export with SCIM Integration**
+  - Export now retrieves usernames from SCIM API instead of full names
+  - Trainees are now exported with their username (email address) for easier import
+  - Added SCIM user lookup function with name-based filtering
+  - Usernames are more suitable for future trainee assignment during import
+
+**v1.2**
 - **Enhanced Assessment Label Field Handling**
   - Export now outputs Assessment Label as labels (None, Self Sign Off, Supervisor Sign Off)
   - Import accepts both labels and integer values for backward compatibility
