@@ -78,6 +78,42 @@ function Get-TypeValue {
     }
 }
 
+function Get-AssessmentLabel {
+    param(
+        [Parameter(Mandatory=$true)]
+        [int]$AssessmentValue
+    )
+
+    switch ($AssessmentValue) {
+        0 { return "None" }
+        1 { return "Self Sign Off" }
+        2 { return "Supervisor Sign Off" }
+        default { return "Unknown ($AssessmentValue)" }
+    }
+}
+
+function Get-AssessmentValue {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$AssessmentLabel
+    )
+
+    switch ($AssessmentLabel.Trim()) {
+        "None" { return 0 }
+        "Self Sign Off" { return 1 }
+        "Supervisor Sign Off" { return 2 }
+        default {
+            # Try to parse as integer for backward compatibility
+            $intValue = 0
+            if ([int]::TryParse($AssessmentLabel, [ref]$intValue)) {
+                return $intValue
+            }
+            Write-ColorOutput "Warning: Unknown Assessment label '$AssessmentLabel', defaulting to 0 (None)" -Type "Warning"
+            return 0
+        }
+    }
+}
+
 function Get-UserInput {
     Write-ColorOutput "`n=== Training Unit Manager ===" -Type "Info"
     Write-ColorOutput "Please provide the following information:`n" -Type "Info"
@@ -337,7 +373,7 @@ function Export-TrainingUnits {
             "Title" = $details.Title
             "Description" = $details.Description
             "Type" = (Get-TypeLabel -TypeValue $details.Type)
-            "Assessment Label" = $details.AssessmentMethod
+            "Assessment Label" = (Get-AssessmentLabel -AssessmentValue $details.AssessmentMethod)
             "Renew Cycle" = $details.RenewCycle
             "Provider" = $details.Provider
             "Linked Processes: Title" = ($linkedProcessTitles -join ";")
@@ -438,7 +474,7 @@ function Import-TrainingUnits {
                 Title = $row.Title
                 Description = $row.Description
                 Type = (Get-TypeValue -TypeLabel $row.Type)
-                AssessmentMethod = [int]$row.'Assessed Label'
+                AssessmentMethod = (Get-AssessmentValue -AssessmentLabel $row.'Assessed Label')
                 RenewCycle = [int]$row.'Renew Cycle'
                 Provider = $row.Provider
                 LinkedProcesses = $linkedProcesses
