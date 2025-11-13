@@ -75,10 +75,11 @@ The import feature will:
 - Title
 - Description
 - Type (label or integer: see Type Values below)
-- Assessed Label (label or integer: see Assessment Method Values below)
+- Assessment Label (label or integer: see Assessment Method Values below)
 - Renew Cycle (integer: see Renew Cycle Values below)
 - Provider
-- Linked Processes: uniqueIds (semicolon-delimited, no spaces)
+- Linked Processes: Title (semicolon-delimited, optional - for reference only)
+- Linked Processes: uniqueId (semicolon-delimited, no spaces)
 - Linked Documents: Titles (semicolon-delimited, no spaces)
 - Trainees: Usernames (semicolon-delimited, optional - usernames/email addresses from SCIM)
 
@@ -118,9 +119,9 @@ Contact your Process Manager administrator for the specific integer values used 
 See [ImportTemplate.csv](ImportTemplate.csv) for an example CSV file format.
 
 ```csv
-Title,Description,Type,Assessed Label,Renew Cycle,Provider,Linked Processes: uniqueIds,Linked Documents: Titles,Trainees: Usernames
-Safety Training 101,Basic safety training for all employees,Course,Self Sign Off,1,Safety Corp,3be24da1-4e95-4edb-b94c-f39e14c61081,Safety Manual.pdf;Emergency Procedures.docx,john.doe@example.com;jane.smith@example.com
-Advanced Excel Course,Advanced Excel training for data analysts,Online Resource,Supervisor Sign Off,12,Tech Training LLC,,Excel Guide.xlsx,
+Title,Description,Type,Assessment Label,Renew Cycle,Provider,Linked Processes: Title,Linked Processes: uniqueId,Linked Documents: Titles,Trainees: Usernames
+Safety Training 101,Basic safety training for all employees,Course,Self Sign Off,1,Safety Corp,,3be24da1-4e95-4edb-b94c-f39e14c61081,Safety Manual.pdf;Emergency Procedures.docx,john.doe@example.com;jane.smith@example.com
+Advanced Excel Course,Advanced Excel training for data analysts,Online Resource,Supervisor Sign Off,12,Tech Training LLC,,,Excel Guide.xlsx,
 ```
 
 ## Error Handling

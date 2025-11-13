@@ -556,7 +556,7 @@ function Import-TrainingUnits {
     }
 
     # Validate required columns
-    $requiredColumns = @('Title', 'Description', 'Type', 'Assessed Label', 'Renew Cycle', 'Provider')
+    $requiredColumns = @('Title', 'Description', 'Type', 'Assessment Label', 'Renew Cycle', 'Provider')
     $firstRow = $csvData | Select-Object -First 1
     $missingColumns = @()
 
@@ -590,8 +590,8 @@ function Import-TrainingUnits {
         try {
             # Parse linked processes
             $linkedProcesses = @()
-            if ($row.'Linked Processes: uniqueIds' -and $row.'Linked Processes: uniqueIds'.Trim() -ne "") {
-                $processIds = $row.'Linked Processes: uniqueIds' -split ';'
+            if ($row.'Linked Processes: uniqueId' -and $row.'Linked Processes: uniqueId'.Trim() -ne "") {
+                $processIds = $row.'Linked Processes: uniqueId' -split ';'
 
                 foreach ($procId in $processIds) {
                     if ($procId.Trim() -ne "") {
@@ -629,7 +629,7 @@ function Import-TrainingUnits {
                 Title = $row.Title
                 Description = $row.Description
                 Type = (Get-TypeValue -TypeLabel $row.Type)
-                AssessmentMethod = (Get-AssessmentValue -AssessmentLabel $row.'Assessed Label')
+                AssessmentMethod = (Get-AssessmentValue -AssessmentLabel $row.'Assessment Label')
                 RenewCycle = [int]$row.'Renew Cycle'
                 Provider = $row.Provider
                 LinkedProcesses = $linkedProcesses
