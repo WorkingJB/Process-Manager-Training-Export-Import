@@ -759,7 +759,8 @@ function Import-TrainingUnits {
                     Write-ColorOutput "Debug: Total UserIds collected: $($userIds.Count)" -Type "Info"
                     if ($userIds.Count -gt 0) {
                         Write-ColorOutput "Debug: UserIds to assign: $($userIds -join ', ')" -Type "Info"
-                        $assignSuccess = Set-TrainingUnitTrainees -TrainingUnitId $trainingUnitId -UserIds $userIds -Provider $row.Provider
+                        Write-ColorOutput "Debug: Using Owner ID ($ownerId) as Supervisor for trainee assignment" -Type "Info"
+                        $assignSuccess = Set-TrainingUnitTrainees -TrainingUnitId $trainingUnitId -UserIds $userIds -SupervisorId $ownerId -Provider $row.Provider
                         if ($assignSuccess) {
                             Write-ColorOutput "Successfully assigned $($userIds.Count) trainee(s)" -Type "Success"
                         } else {
