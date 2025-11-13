@@ -409,13 +409,32 @@ function Set-TrainingUnitTrainees {
             ScheduleTraineesModel = $traineeModels
         }
 
+        Write-ColorOutput "Debug: Assigning trainees to TrainingUnitId: $TrainingUnitId" -Type "Info"
+        Write-ColorOutput "Debug: Number of trainees: $($traineeModels.Count)" -Type "Info"
+        Write-ColorOutput "Debug: Request body: $($requestBody | ConvertTo-Json -Depth 5)" -Type "Info"
+
         $endpoint = "$script:TenantName/Training/Schedule/SaveSchedule"
         $response = Invoke-ApiRequest -Endpoint $endpoint -Method Post -Body $requestBody
 
         if ($response) {
-            return $true
+            Write-ColorOutput "Debug: SaveSchedule response: $($response | ConvertTo-Json -Depth 3)" -Type "Info"
+
+            # Check if response indicates success
+            if ($response.success -eq $true) {
+                return $true
+            } elseif ($response.PSObject.Properties.Name -notcontains 'success') {
+                # If there's no success property but we got a response, assume success
+                return $true
+            } else {
+                Write-ColorOutput "Debug: SaveSchedule returned success=false" -Type "Warning"
+                if ($response.errorMessage) {
+                    Write-ColorOutput "Debug: Error message: $($response.errorMessage)" -Type "Warning"
+                }
+                return $false
+            }
         }
 
+        Write-ColorOutput "Debug: SaveSchedule returned null response" -Type "Warning"
         return $false
     } catch {
         Write-ColorOutput "Error assigning trainees to training unit: $($_.Exception.Message)" -Type "Error"
@@ -719,22 +738,27 @@ function Import-TrainingUnits {
                 # Assign trainees if provided
                 if ($row.'Trainees: Usernames' -and $row.'Trainees: Usernames'.Trim() -ne "") {
                     Write-ColorOutput "Assigning trainees..." -Type "Info"
+                    Write-ColorOutput "Debug: Raw trainee data: '$($row.'Trainees: Usernames')'" -Type "Info"
                     $usernames = $row.'Trainees: Usernames' -split ';'
+                    Write-ColorOutput "Debug: Split into $($usernames.Count) username(s)" -Type "Info"
                     $userIds = @()
 
                     foreach ($username in $usernames) {
                         if ($username.Trim() -ne "") {
+                            Write-ColorOutput "  Looking up username: '$($username.Trim())'" -Type "Info"
                             $userId = Get-ScimUserIdByUsername -Username $username.Trim()
                             if ($userId) {
                                 $userIds += $userId
-                                Write-ColorOutput "  Found user: $($username.Trim()) (ID: $userId)" -Type "Info"
+                                Write-ColorOutput "  Found user: $($username.Trim()) (ID: $userId)" -Type "Success"
                             } else {
                                 Write-ColorOutput "  Warning: Could not find UserId for username: $($username.Trim())" -Type "Warning"
                             }
                         }
                     }
 
+                    Write-ColorOutput "Debug: Total UserIds collected: $($userIds.Count)" -Type "Info"
                     if ($userIds.Count -gt 0) {
+                        Write-ColorOutput "Debug: UserIds to assign: $($userIds -join ', ')" -Type "Info"
                         $assignSuccess = Set-TrainingUnitTrainees -TrainingUnitId $trainingUnitId -UserIds $userIds -Provider $row.Provider
                         if ($assignSuccess) {
                             Write-ColorOutput "Successfully assigned $($userIds.Count) trainee(s)" -Type "Success"
@@ -742,8 +766,10 @@ function Import-TrainingUnits {
                             Write-ColorOutput "Warning: Failed to assign trainees" -Type "Warning"
                         }
                     } else {
-                        Write-ColorOutput "No valid trainees found to assign" -Type "Warning"
+                        Write-ColorOutput "Warning: No valid trainees found to assign" -Type "Warning"
                     }
+                } else {
+                    Write-ColorOutput "Debug: No trainees specified in CSV for this training unit" -Type "Info"
                 }
 
                 $successCount++
