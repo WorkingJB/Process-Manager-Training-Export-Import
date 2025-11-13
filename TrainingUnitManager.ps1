@@ -221,7 +221,11 @@ function Invoke-ApiRequest {
         }
         return $response
     } catch {
-        Write-ColorOutput "API request failed: $uri - $($_.Exception.Message)" -Type "Error"
+        $statusCode = $_.Exception.Response.StatusCode.value__
+        $statusDescription = $_.Exception.Response.StatusDescription
+        Write-ColorOutput "API request failed: $uri" -Type "Error"
+        Write-ColorOutput "Status: $statusCode - $statusDescription" -Type "Error"
+        Write-ColorOutput "Error: $($_.Exception.Message)" -Type "Error"
         return $null
     }
 }
@@ -321,15 +325,101 @@ function Get-ScimUserById {
 
         $response = Invoke-ApiRequest -Endpoint $endpoint -Method Get -UseScimApi $true
 
-        if ($response -and $response.Resources -and $response.Resources.Count -gt 0) {
-            # Return the userName from the first resource
-            return $response.Resources[0].userName
+        if ($response) {
+            # Debug: Check what we got back
+            if ($response.userName) {
+                # Return the userName directly (single user query returns object, not Resources array)
+                return $response.userName
+            } else {
+                Write-ColorOutput "Debug: SCIM response for UserId $UserId has no userName field. Response type: $($response.GetType().Name)" -Type "Warning"
+                Write-ColorOutput "Debug: Response properties: $($response | Get-Member -MemberType Properties | Select-Object -ExpandProperty Name | Out-String)" -Type "Warning"
+            }
+        } else {
+            Write-ColorOutput "Debug: SCIM API returned null response for UserId $UserId" -Type "Warning"
         }
 
         return $null
     } catch {
         Write-ColorOutput "Warning: Failed to lookup SCIM user for UserId $UserId : $($_.Exception.Message)" -Type "Warning"
         return $null
+    }
+}
+
+function Get-ScimUserIdByUsername {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Username
+    )
+
+    try {
+        # SCIM API filter to find user by username
+        $filter = "userName eq `"$Username`""
+        $encodedFilter = [System.Uri]::EscapeDataString($filter)
+        $endpoint = "api/scim/users?filter=$encodedFilter"
+
+        $response = Invoke-ApiRequest -Endpoint $endpoint -Method Get -UseScimApi $true
+
+        if ($response -and $response.Resources -and $response.Resources.Count -gt 0) {
+            # Return the user ID from the first matching resource
+            return [int]$response.Resources[0].id
+        }
+
+        return $null
+    } catch {
+        Write-ColorOutput "Warning: Failed to lookup SCIM user for username $Username : $($_.Exception.Message)" -Type "Warning"
+        return $null
+    }
+}
+
+function Set-TrainingUnitTrainees {
+    param(
+        [Parameter(Mandatory=$true)]
+        [int]$TrainingUnitId,
+
+        [Parameter(Mandatory=$true)]
+        [array]$UserIds,
+
+        [Parameter(Mandatory=$false)]
+        [int]$SupervisorId = 0,
+
+        [Parameter(Mandatory=$false)]
+        [string]$DueDate = "",
+
+        [Parameter(Mandatory=$false)]
+        [string]$Provider = "",
+
+        [Parameter(Mandatory=$false)]
+        [string]$Location = ""
+    )
+
+    try {
+        # Build trainee model array
+        $traineeModels = @()
+        foreach ($userId in $UserIds) {
+            $traineeModels += @{ UserId = $userId }
+        }
+
+        # Build request body
+        $requestBody = @{
+            TrainingUnitId = $TrainingUnitId
+            SupervisorId = $SupervisorId
+            DueDate = $DueDate
+            Provider = $Provider
+            Location = $Location
+            ScheduleTraineesModel = $traineeModels
+        }
+
+        $endpoint = "$script:TenantName/Training/Schedule/SaveSchedule"
+        $response = Invoke-ApiRequest -Endpoint $endpoint -Method Post -Body $requestBody
+
+        if ($response) {
+            return $true
+        }
+
+        return $false
+    } catch {
+        Write-ColorOutput "Error assigning trainees to training unit: $($_.Exception.Message)" -Type "Error"
+        return $false
     }
 }
 
@@ -344,7 +434,8 @@ function Export-TrainingUnits {
     $allUnits = Get-AllTrainingUnits
 
     if ($allUnits.Count -eq 0) {
-        Write-ColorOutput "No training units found to export." -Type "Warning"
+        Write-ColorOutput "`nNo training units found to export." -Type "Warning"
+        Write-ColorOutput "This could mean there are no training units in the system, or there was an error fetching them." -Type "Warning"
         return
     }
 
@@ -397,6 +488,15 @@ function Export-TrainingUnits {
             }
         }
 
+        # Get owner username from SCIM
+        $ownerUsername = ""
+        if ($details.OwnerId) {
+            $ownerUsername = Get-ScimUserById -UserId $details.OwnerId
+            if (-not $ownerUsername) {
+                Write-ColorOutput "Warning: Could not find SCIM username for owner UserId $($details.OwnerId), using blank" -Type "Warning"
+            }
+        }
+
         # Create export object
         $exportObject = [PSCustomObject]@{
             "Title" = $details.Title
@@ -405,6 +505,7 @@ function Export-TrainingUnits {
             "Assessment Label" = (Get-AssessmentLabel -AssessmentValue $details.AssessmentMethod)
             "Renew Cycle" = $details.RenewCycle
             "Provider" = $details.Provider
+            "Owner Username" = $ownerUsername
             "Linked Processes: Title" = ($linkedProcessTitles -join ";")
             "Linked Processes: uniqueId" = ($linkedProcessUniqueIds -join ";")
             "Linked Documents: Titles" = ($linkedDocTitles -join ";")
@@ -439,7 +540,10 @@ function Import-TrainingUnits {
     $csvPath = Read-Host "Enter the path to the CSV file"
 
     if (-not (Test-Path $csvPath)) {
-        Write-ColorOutput "File not found: $csvPath" -Type "Error"
+        Write-ColorOutput "`nERROR: File not found: $csvPath" -Type "Error"
+        Write-ColorOutput "Please check the file path and try again." -Type "Error"
+        Write-Host "`nPress any key to exit..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         return
     }
 
@@ -447,7 +551,39 @@ function Import-TrainingUnits {
     try {
         $csvData = Import-Csv -Path $csvPath
     } catch {
-        Write-ColorOutput "Failed to read CSV file: $($_.Exception.Message)" -Type "Error"
+        Write-ColorOutput "`nERROR: Failed to read CSV file: $($_.Exception.Message)" -Type "Error"
+        Write-ColorOutput "Please ensure the file is a valid CSV format." -Type "Error"
+        Write-Host "`nPress any key to exit..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        return
+    }
+
+    if ($csvData.Count -eq 0) {
+        Write-ColorOutput "`nERROR: The CSV file is empty or has no data rows." -Type "Error"
+        Write-Host "`nPress any key to exit..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        return
+    }
+
+    # Validate required columns
+    $requiredColumns = @('Title', 'Description', 'Type', 'Assessment Label', 'Renew Cycle', 'Provider')
+    $firstRow = $csvData | Select-Object -First 1
+    $missingColumns = @()
+
+    foreach ($column in $requiredColumns) {
+        if (-not ($firstRow.PSObject.Properties.Name -contains $column)) {
+            $missingColumns += $column
+        }
+    }
+
+    if ($missingColumns.Count -gt 0) {
+        Write-ColorOutput "`nERROR: The CSV file is missing required columns:" -Type "Error"
+        foreach ($col in $missingColumns) {
+            Write-ColorOutput "  - $col" -Type "Error"
+        }
+        Write-ColorOutput "`nPlease ensure your CSV has all required columns. See ImportTemplate.csv for reference." -Type "Error"
+        Write-Host "`nPress any key to exit..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         return
     }
 
@@ -464,8 +600,8 @@ function Import-TrainingUnits {
         try {
             # Parse linked processes
             $linkedProcesses = @()
-            if ($row.'Linked Processes: uniqueIds' -and $row.'Linked Processes: uniqueIds'.Trim() -ne "") {
-                $processIds = $row.'Linked Processes: uniqueIds' -split ';'
+            if ($row.'Linked Processes: uniqueId' -and $row.'Linked Processes: uniqueId'.Trim() -ne "") {
+                $processIds = $row.'Linked Processes: uniqueId' -split ';'
 
                 foreach ($procId in $processIds) {
                     if ($procId.Trim() -ne "") {
@@ -497,15 +633,47 @@ function Import-TrainingUnits {
                 }
             }
 
+            # Look up owner UserId from username
+            $ownerId = 0
+            $ownerName = ""
+            if ($row.'Owner Username' -and $row.'Owner Username'.Trim() -ne "") {
+                Write-ColorOutput "Looking up owner: $($row.'Owner Username'.Trim())" -Type "Info"
+                $ownerId = Get-ScimUserIdByUsername -Username $row.'Owner Username'.Trim()
+                if ($ownerId) {
+                    Write-ColorOutput "  Found owner: $($row.'Owner Username'.Trim()) (ID: $ownerId)" -Type "Info"
+                    $ownerName = $row.'Owner Username'.Trim()
+                } else {
+                    Write-ColorOutput "  Warning: Could not find UserId for owner username: $($row.'Owner Username'.Trim())" -Type "Warning"
+                    throw "Owner username not found in SCIM. Training unit requires a valid owner."
+                }
+            } else {
+                throw "Owner Username is required but not provided in CSV"
+            }
+
             # Build request body
+            $typeValue = Get-TypeValue -TypeLabel $row.Type
+            $typeLabel = Get-TypeLabel -TypeValue $typeValue
+
             $requestBody = @{
                 Id = 0  # 0 for new training unit
                 Title = $row.Title
                 Description = $row.Description
-                Type = (Get-TypeValue -TypeLabel $row.Type)
-                AssessmentMethod = (Get-AssessmentValue -AssessmentLabel $row.'Assessed Label')
+                Type = $typeValue.ToString()  # API expects string
+                TypeLabel = $typeLabel
+                AssessmentMethod = (Get-AssessmentValue -AssessmentLabel $row.'Assessment Label')
                 RenewCycle = [int]$row.'Renew Cycle'
+                RenewCycleLabel = ""
+                RenewalPeriod = 0
                 Provider = $row.Provider
+                Location = ""
+                ReferenceNumber = ""
+                OwnerId = $ownerId
+                Owner = @{
+                    UserId = $ownerId
+                    Name = $ownerName
+                    AvatarUrl = ""
+                    Email = ""
+                }
                 LinkedProcesses = $linkedProcesses
                 LinkedDocuments = $linkedDocuments
                 OtherResources = @()
@@ -515,13 +683,72 @@ function Import-TrainingUnits {
 
             # Create training unit
             $endpoint = "$script:TenantName/Training/Unit/EditTrainingUnit"
+
+            # Debug: Log the request being sent
+            Write-ColorOutput "Debug: Sending request to create training unit..." -Type "Info"
             $response = Invoke-ApiRequest -Endpoint $endpoint -Method Post -Body $requestBody
 
+            # Debug: Log response details
             if ($response) {
-                Write-ColorOutput "Successfully created: $($row.Title)" -Type "Success"
+                Write-ColorOutput "Debug: Received response from API" -Type "Info"
+                Write-ColorOutput "Debug: Response type: $($response.GetType().Name)" -Type "Info"
+
+                # Check if response has success property
+                if ($response.PSObject.Properties.Name -contains 'success') {
+                    Write-ColorOutput "Debug: Response.success = $($response.success)" -Type "Info"
+                }
+
+                # Check what properties the response has
+                $responseProps = $response | Get-Member -MemberType Properties | Select-Object -ExpandProperty Name
+                Write-ColorOutput "Debug: Response properties: $($responseProps -join ', ')" -Type "Info"
+
+                if ($response.trainingUnit) {
+                    $trainingUnitId = $response.trainingUnit.Id
+                    Write-ColorOutput "Successfully created: $($row.Title) (ID: $trainingUnitId)" -Type "Success"
+                } else {
+                    Write-ColorOutput "Debug: Response does not contain 'trainingUnit' property" -Type "Warning"
+                    Write-ColorOutput "Debug: Full response: $($response | ConvertTo-Json -Depth 3)" -Type "Warning"
+                }
+            } else {
+                Write-ColorOutput "Debug: API returned null response" -Type "Error"
+            }
+
+            if ($response -and $response.trainingUnit) {
+                $trainingUnitId = $response.trainingUnit.Id
+
+                # Assign trainees if provided
+                if ($row.'Trainees: Usernames' -and $row.'Trainees: Usernames'.Trim() -ne "") {
+                    Write-ColorOutput "Assigning trainees..." -Type "Info"
+                    $usernames = $row.'Trainees: Usernames' -split ';'
+                    $userIds = @()
+
+                    foreach ($username in $usernames) {
+                        if ($username.Trim() -ne "") {
+                            $userId = Get-ScimUserIdByUsername -Username $username.Trim()
+                            if ($userId) {
+                                $userIds += $userId
+                                Write-ColorOutput "  Found user: $($username.Trim()) (ID: $userId)" -Type "Info"
+                            } else {
+                                Write-ColorOutput "  Warning: Could not find UserId for username: $($username.Trim())" -Type "Warning"
+                            }
+                        }
+                    }
+
+                    if ($userIds.Count -gt 0) {
+                        $assignSuccess = Set-TrainingUnitTrainees -TrainingUnitId $trainingUnitId -UserIds $userIds -Provider $row.Provider
+                        if ($assignSuccess) {
+                            Write-ColorOutput "Successfully assigned $($userIds.Count) trainee(s)" -Type "Success"
+                        } else {
+                            Write-ColorOutput "Warning: Failed to assign trainees" -Type "Warning"
+                        }
+                    } else {
+                        Write-ColorOutput "No valid trainees found to assign" -Type "Warning"
+                    }
+                }
+
                 $successCount++
             } else {
-                $errorMsg = "Failed to create training unit (API returned null)"
+                $errorMsg = "Failed to create training unit (API returned null or invalid response)"
                 Write-ColorOutput $errorMsg -Type "Error"
                 $failedRows += [PSCustomObject]@{
                     Row = $currentRow
@@ -568,6 +795,8 @@ function Main {
 
     if (-not $authSuccess) {
         Write-ColorOutput "`nAuthentication failed. Exiting..." -Type "Error"
+        Write-Host "`nPress any key to exit..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         return
     }
 
@@ -578,9 +807,20 @@ function Main {
     }
 
     Write-ColorOutput "`nScript completed!" -Type "Success"
+    Write-Host "`nPress any key to exit..."
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 }
 
 # Run main function
-Main
+try {
+    Main
+} catch {
+    Write-ColorOutput "`n=== UNEXPECTED ERROR ===" -Type "Error"
+    Write-ColorOutput "An unexpected error occurred: $($_.Exception.Message)" -Type "Error"
+    Write-ColorOutput "`nStack trace:" -Type "Error"
+    Write-Host $_.ScriptStackTrace -ForegroundColor Red
+    Write-Host "`nPress any key to exit..."
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+}
 
 #endregion

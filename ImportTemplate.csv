@@ -1,4 +1,4 @@
-Title,Description,Type,Assessed Label,Renew Cycle,Provider,Linked Processes: uniqueIds,Linked Documents: Titles
-Safety Training 101,Basic safety training for all employees,Course,Self Sign Off,1,Safety Corp,3be24da1-4e95-4edb-b94c-f39e14c61081,Safety Manual.pdf;Emergency Procedures.docx
-Advanced Excel Course,Advanced Excel training for data analysts,Online Resource,Supervisor Sign Off,12,Tech Training LLC,,Excel Guide.xlsx
-Onboarding Program,New employee onboarding process,Course,None,1,HR Department,e18ca026-e671-4e88-9d3c-1773f08c7b81;3be24da1-4e95-4edb-b94c-f39e14c61081,Employee Handbook.pdf
+Title,Description,Type,Assessment Label,Renew Cycle,Provider,Owner Username,Linked Processes: Title,Linked Processes: uniqueId,Linked Documents: Titles,Trainees: Usernames
+Safety Training 101,Basic safety training for all employees,Course,Self Sign Off,1,Safety Corp,john.doe@example.com,,3be24da1-4e95-4edb-b94c-f39e14c61081,Safety Manual.pdf;Emergency Procedures.docx,john.doe@example.com;jane.smith@example.com
+Advanced Excel Course,Advanced Excel training for data analysts,Online Resource,Supervisor Sign Off,12,Tech Training LLC,jane.smith@example.com,,,Excel Guide.xlsx,
+Onboarding Program,New employee onboarding process,Course,None,1,HR Department,john.doe@example.com,,e18ca026-e671-4e88-9d3c-1773f08c7b81;3be24da1-4e95-4edb-b94c-f39e14c61081,Employee Handbook.pdf,john.doe@example.com
