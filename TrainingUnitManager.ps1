@@ -40,6 +40,80 @@ function Write-ColorOutput {
     }
 }
 
+function Get-TypeLabel {
+    param(
+        [Parameter(Mandatory=$true)]
+        [int]$TypeValue
+    )
+
+    switch ($TypeValue) {
+        1 { return "Course" }
+        2 { return "Online Resource" }
+        3 { return "Document" }
+        6 { return "Face to Face" }
+        default { return "Unknown ($TypeValue)" }
+    }
+}
+
+function Get-TypeValue {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$TypeLabel
+    )
+
+    switch ($TypeLabel.Trim()) {
+        "Course" { return 1 }
+        "Online Resource" { return 2 }
+        "Document" { return 3 }
+        "Face to Face" { return 6 }
+        default {
+            # Try to parse as integer for backward compatibility
+            $intValue = 0
+            if ([int]::TryParse($TypeLabel, [ref]$intValue)) {
+                return $intValue
+            }
+            Write-ColorOutput "Warning: Unknown Type label '$TypeLabel', defaulting to 1 (Course)" -Type "Warning"
+            return 1
+        }
+    }
+}
+
+function Get-AssessmentLabel {
+    param(
+        [Parameter(Mandatory=$true)]
+        [int]$AssessmentValue
+    )
+
+    switch ($AssessmentValue) {
+        0 { return "None" }
+        1 { return "Self Sign Off" }
+        2 { return "Supervisor Sign Off" }
+        default { return "Unknown ($AssessmentValue)" }
+    }
+}
+
+function Get-AssessmentValue {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$AssessmentLabel
+    )
+
+    switch ($AssessmentLabel.Trim()) {
+        "None" { return 0 }
+        "Self Sign Off" { return 1 }
+        "Supervisor Sign Off" { return 2 }
+        default {
+            # Try to parse as integer for backward compatibility
+            $intValue = 0
+            if ([int]::TryParse($AssessmentLabel, [ref]$intValue)) {
+                return $intValue
+            }
+            Write-ColorOutput "Warning: Unknown Assessment label '$AssessmentLabel', defaulting to 0 (None)" -Type "Warning"
+            return 0
+        }
+    }
+}
+
 function Get-UserInput {
     Write-ColorOutput "`n=== Training Unit Manager ===" -Type "Info"
     Write-ColorOutput "Please provide the following information:`n" -Type "Info"
@@ -235,6 +309,30 @@ function Get-TrainingUnitTrainees {
     return $allTrainees
 }
 
+function Get-ScimUserById {
+    param(
+        [Parameter(Mandatory=$true)]
+        [int]$UserId
+    )
+
+    try {
+        # SCIM API endpoint to get user by ID
+        $endpoint = "api/scim/users/$UserId"
+
+        $response = Invoke-ApiRequest -Endpoint $endpoint -Method Get -UseScimApi $true
+
+        if ($response -and $response.Resources -and $response.Resources.Count -gt 0) {
+            # Return the userName from the first resource
+            return $response.Resources[0].userName
+        }
+
+        return $null
+    } catch {
+        Write-ColorOutput "Warning: Failed to lookup SCIM user for UserId $UserId : $($_.Exception.Message)" -Type "Warning"
+        return $null
+    }
+}
+
 #endregion
 
 #region Export Functions
@@ -285,12 +383,17 @@ function Export-TrainingUnits {
             }
         }
 
-        # Get trainees
+        # Get trainees and lookup usernames from SCIM
         $trainees = Get-TrainingUnitTrainees -UnitUniqueId $unit.UniqueId
-        $traineeNames = @()
+        $traineeUsernames = @()
         foreach ($trainee in $trainees) {
-            if ($trainee.UserFullName) {
-                $traineeNames += $trainee.UserFullName
+            if ($trainee.UserId) {
+                $username = Get-ScimUserById -UserId $trainee.UserId
+                if ($username) {
+                    $traineeUsernames += $username
+                } else {
+                    Write-ColorOutput "Warning: Could not find SCIM username for UserId $($trainee.UserId) ($($trainee.UserFullName)), skipping..." -Type "Warning"
+                }
             }
         }
 
@@ -298,14 +401,14 @@ function Export-TrainingUnits {
         $exportObject = [PSCustomObject]@{
             "Title" = $details.Title
             "Description" = $details.Description
-            "Type" = $details.Type
-            "Assessment Label" = $details.AssessmentMethod
+            "Type" = (Get-TypeLabel -TypeValue $details.Type)
+            "Assessment Label" = (Get-AssessmentLabel -AssessmentValue $details.AssessmentMethod)
             "Renew Cycle" = $details.RenewCycle
             "Provider" = $details.Provider
             "Linked Processes: Title" = ($linkedProcessTitles -join ";")
             "Linked Processes: uniqueId" = ($linkedProcessUniqueIds -join ";")
             "Linked Documents: Titles" = ($linkedDocTitles -join ";")
-            "Trainees: UserFullNames" = ($traineeNames -join ";")
+            "Trainees: Usernames" = ($traineeUsernames -join ";")
         }
 
         $exportData += $exportObject
@@ -399,8 +502,8 @@ function Import-TrainingUnits {
                 Id = 0  # 0 for new training unit
                 Title = $row.Title
                 Description = $row.Description
-                Type = [int]$row.Type
-                AssessmentMethod = [int]$row.'Assessed Label'
+                Type = (Get-TypeValue -TypeLabel $row.Type)
+                AssessmentMethod = (Get-AssessmentValue -AssessmentLabel $row.'Assessed Label')
                 RenewCycle = [int]$row.'Renew Cycle'
                 Provider = $row.Provider
                 LinkedProcesses = $linkedProcesses
