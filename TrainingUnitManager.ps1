@@ -321,9 +321,9 @@ function Get-ScimUserById {
 
         $response = Invoke-ApiRequest -Endpoint $endpoint -Method Get -UseScimApi $true
 
-        if ($response -and $response.Resources -and $response.Resources.Count -gt 0) {
-            # Return the userName from the first resource
-            return $response.Resources[0].userName
+        if ($response -and $response.userName) {
+            # Return the userName directly (single user query returns object, not Resources array)
+            return $response.userName
         }
 
         return $null
