@@ -221,7 +221,11 @@ function Invoke-ApiRequest {
         }
         return $response
     } catch {
-        Write-ColorOutput "API request failed: $uri - $($_.Exception.Message)" -Type "Error"
+        $statusCode = $_.Exception.Response.StatusCode.value__
+        $statusDescription = $_.Exception.Response.StatusDescription
+        Write-ColorOutput "API request failed: $uri" -Type "Error"
+        Write-ColorOutput "Status: $statusCode - $statusDescription" -Type "Error"
+        Write-ColorOutput "Error: $($_.Exception.Message)" -Type "Error"
         return $null
     }
 }
@@ -321,9 +325,17 @@ function Get-ScimUserById {
 
         $response = Invoke-ApiRequest -Endpoint $endpoint -Method Get -UseScimApi $true
 
-        if ($response -and $response.userName) {
-            # Return the userName directly (single user query returns object, not Resources array)
-            return $response.userName
+        if ($response) {
+            # Debug: Check what we got back
+            if ($response.userName) {
+                # Return the userName directly (single user query returns object, not Resources array)
+                return $response.userName
+            } else {
+                Write-ColorOutput "Debug: SCIM response for UserId $UserId has no userName field. Response type: $($response.GetType().Name)" -Type "Warning"
+                Write-ColorOutput "Debug: Response properties: $($response | Get-Member -MemberType Properties | Select-Object -ExpandProperty Name | Out-String)" -Type "Warning"
+            }
+        } else {
+            Write-ColorOutput "Debug: SCIM API returned null response for UserId $UserId" -Type "Warning"
         }
 
         return $null
