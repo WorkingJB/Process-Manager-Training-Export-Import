@@ -641,11 +641,38 @@ function Import-TrainingUnits {
 
             # Create training unit
             $endpoint = "$script:TenantName/Training/Unit/EditTrainingUnit"
+
+            # Debug: Log the request being sent
+            Write-ColorOutput "Debug: Sending request to create training unit..." -Type "Info"
             $response = Invoke-ApiRequest -Endpoint $endpoint -Method Post -Body $requestBody
+
+            # Debug: Log response details
+            if ($response) {
+                Write-ColorOutput "Debug: Received response from API" -Type "Info"
+                Write-ColorOutput "Debug: Response type: $($response.GetType().Name)" -Type "Info"
+
+                # Check if response has success property
+                if ($response.PSObject.Properties.Name -contains 'success') {
+                    Write-ColorOutput "Debug: Response.success = $($response.success)" -Type "Info"
+                }
+
+                # Check what properties the response has
+                $responseProps = $response | Get-Member -MemberType Properties | Select-Object -ExpandProperty Name
+                Write-ColorOutput "Debug: Response properties: $($responseProps -join ', ')" -Type "Info"
+
+                if ($response.trainingUnit) {
+                    $trainingUnitId = $response.trainingUnit.Id
+                    Write-ColorOutput "Successfully created: $($row.Title) (ID: $trainingUnitId)" -Type "Success"
+                } else {
+                    Write-ColorOutput "Debug: Response does not contain 'trainingUnit' property" -Type "Warning"
+                    Write-ColorOutput "Debug: Full response: $($response | ConvertTo-Json -Depth 3)" -Type "Warning"
+                }
+            } else {
+                Write-ColorOutput "Debug: API returned null response" -Type "Error"
+            }
 
             if ($response -and $response.trainingUnit) {
                 $trainingUnitId = $response.trainingUnit.Id
-                Write-ColorOutput "Successfully created: $($row.Title) (ID: $trainingUnitId)" -Type "Success"
 
                 # Assign trainees if provided
                 if ($row.'Trainees: Usernames' -and $row.'Trainees: Usernames'.Trim() -ne "") {
