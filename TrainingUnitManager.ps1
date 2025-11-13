@@ -393,6 +393,13 @@ function Set-TrainingUnitTrainees {
     )
 
     try {
+        # Debug: Log received parameters
+        Write-ColorOutput "Debug: Set-TrainingUnitTrainees called with parameters:" -Type "Info"
+        Write-ColorOutput "  TrainingUnitId: $TrainingUnitId (Type: $($TrainingUnitId.GetType().Name))" -Type "Info"
+        Write-ColorOutput "  SupervisorId: $SupervisorId (Type: $($SupervisorId.GetType().Name))" -Type "Info"
+        Write-ColorOutput "  UserIds count: $($UserIds.Count)" -Type "Info"
+        Write-ColorOutput "  Provider: '$Provider'" -Type "Info"
+
         # Build trainee model array
         $traineeModels = @()
         foreach ($userId in $UserIds) {
@@ -759,8 +766,18 @@ function Import-TrainingUnits {
                     Write-ColorOutput "Debug: Total UserIds collected: $($userIds.Count)" -Type "Info"
                     if ($userIds.Count -gt 0) {
                         Write-ColorOutput "Debug: UserIds to assign: $($userIds -join ', ')" -Type "Info"
+                        Write-ColorOutput "Debug: OwnerId variable value before assignment: '$ownerId' (Type: $($ownerId.GetType().Name))" -Type "Info"
                         Write-ColorOutput "Debug: Using Owner ID ($ownerId) as Supervisor for trainee assignment" -Type "Info"
-                        $assignSuccess = Set-TrainingUnitTrainees -TrainingUnitId $trainingUnitId -UserIds $userIds -SupervisorId $ownerId -Provider $row.Provider
+
+                        # Store provider value to avoid parameter binding issues
+                        $providerValue = if ($row.Provider) { $row.Provider } else { "" }
+
+                        # Call with explicit type casting
+                        $assignSuccess = Set-TrainingUnitTrainees `
+                            -TrainingUnitId $trainingUnitId `
+                            -UserIds $userIds `
+                            -SupervisorId ([int]$ownerId) `
+                            -Provider $providerValue
                         if ($assignSuccess) {
                             Write-ColorOutput "Successfully assigned $($userIds.Count) trainee(s)" -Type "Success"
                         } else {
