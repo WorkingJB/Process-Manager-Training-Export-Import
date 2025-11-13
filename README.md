@@ -66,6 +66,8 @@ The import feature will:
 - Read a CSV file with training unit data
 - Look up process details for each linked process uniqueId
 - Create new training units via the API
+- Look up user IDs from usernames via SCIM API
+- Assign trainees to the newly created training units
 - Skip failed rows and continue processing
 - Display a summary report at the end
 
@@ -78,8 +80,7 @@ The import feature will:
 - Provider
 - Linked Processes: uniqueIds (semicolon-delimited, no spaces)
 - Linked Documents: Titles (semicolon-delimited, no spaces)
-
-**Note:** Trainee assignment is not currently supported in the import process and will be added in a future update.
+- Trainees: Usernames (semicolon-delimited, optional - usernames/email addresses from SCIM)
 
 ## Field Value Reference
 
@@ -117,9 +118,9 @@ Contact your Process Manager administrator for the specific integer values used 
 See [ImportTemplate.csv](ImportTemplate.csv) for an example CSV file format.
 
 ```csv
-Title,Description,Type,Assessed Label,Renew Cycle,Provider,Linked Processes: uniqueIds,Linked Documents: Titles
-Safety Training 101,Basic safety training for all employees,Course,Self Sign Off,1,Safety Corp,3be24da1-4e95-4edb-b94c-f39e14c61081,Safety Manual.pdf;Emergency Procedures.docx
-Advanced Excel Course,Advanced Excel training for data analysts,Online Resource,Supervisor Sign Off,12,Tech Training LLC,,Excel Guide.xlsx
+Title,Description,Type,Assessed Label,Renew Cycle,Provider,Linked Processes: uniqueIds,Linked Documents: Titles,Trainees: Usernames
+Safety Training 101,Basic safety training for all employees,Course,Self Sign Off,1,Safety Corp,3be24da1-4e95-4edb-b94c-f39e14c61081,Safety Manual.pdf;Emergency Procedures.docx,john.doe@example.com;jane.smith@example.com
+Advanced Excel Course,Advanced Excel training for data analysts,Online Resource,Supervisor Sign Off,12,Tech Training LLC,,Excel Guide.xlsx,
 ```
 
 ## Error Handling
@@ -141,19 +142,27 @@ Advanced Excel Course,Advanced Excel training for data analysts,Online Resource,
 
 The script interacts with the following Process Manager API endpoints:
 
-- `POST /{tenant}/oauth2/token` - Authentication
-- `GET /{tenant}/Training/Register/ListPage` - List all training units
-- `GET /{tenant}/Training/Unit/GetTrainingUnitDetails` - Get unit details
-- `GET /{tenant}/Training/Trainee` - Get trainees for a unit
-- `GET /{tenant}/Api/v1/Processes/{processUniqueId}` - Get process details
-- `POST /{tenant}/Training/Unit/EditTrainingUnit` - Create training unit
-- `GET https://api.promapp.com/api/scim/users` - SCIM user lookup (for future use)
+**Authentication:**
+- `POST /{tenant}/oauth2/token` - OAuth2 authentication
+
+**Training Unit Operations:**
+- `GET /{tenant}/Training/Register/ListPage` - List all training units (paginated)
+- `GET /{tenant}/Training/Unit/GetTrainingUnitDetails` - Get full unit details
+- `POST /{tenant}/Training/Unit/EditTrainingUnit` - Create/update training unit
+- `GET /{tenant}/Training/Trainee` - Get trainees assigned to a unit (paginated)
+- `POST /{tenant}/Training/Schedule/SaveSchedule` - Assign trainees to a unit
+
+**Process Operations:**
+- `GET /{tenant}/Api/v1/Processes/{processUniqueId}` - Get process details by unique ID
+
+**SCIM API Operations:**
+- `GET https://api.promapp.com/api/scim/users/{id}` - Get user by ID
+- `GET https://api.promapp.com/api/scim/users?filter={filter}` - Search users by username
 
 ## Known Limitations
 
-1. **Trainee Assignment**: The current version does not support assigning trainees during import. This will be added in a future update.
-2. **Document Lookup**: Linked documents are stored by title only. If you need to link documents during import, you'll need to ensure the document titles match exactly.
-3. **Field Values**: Type, Assessment Method, and Renew Cycle values are system-specific integers. You'll need to consult your Process Manager administrator for the correct values.
+1. **Document Lookup**: Linked documents are stored by title only. If you need to link documents during import, you'll need to ensure the document titles match exactly.
+2. **Trainee Scheduling**: While trainees are assigned during import, advanced scheduling options (custom due dates, supervisor assignment) are not yet supported through the CSV import.
 
 ## Troubleshooting
 
@@ -172,6 +181,12 @@ The script interacts with the following Process Manager API endpoints:
 - Verify integer values are correct for Type, Assessment Method, and Renew Cycle
 - Ensure semicolon-delimited fields have no spaces after semicolons
 
+### Trainee Assignment Fails
+- Verify the usernames in the CSV match exactly with SCIM usernames
+- Check that the SCIM API key has permissions to query users
+- Ensure users exist in the system before attempting to assign them
+- Review the console output for specific user lookup failures
+
 ## Security Notes
 
 - Credentials are input securely using PowerShell's `Read-Host -AsSecureString`
@@ -189,7 +204,16 @@ For issues or questions:
 
 ## Version History
 
-**v1.3** (Current)
+**v2.0** (Current)
+- **Trainee Assignment During Import**
+  - Import now supports assigning trainees to training units
+  - Added SCIM username to UserId lookup function
+  - Automatically assigns trainees listed in the CSV after creating training unit
+  - Uses SaveSchedule endpoint for trainee assignment
+  - Provides detailed feedback on trainee lookup and assignment status
+  - Updated CSV format to include "Trainees: Usernames" column
+
+**v1.3**
 - **Enhanced Trainee Export with SCIM Integration**
   - Export now retrieves usernames from SCIM API instead of full names
   - Trainees are now exported with their username (email address) for easier import

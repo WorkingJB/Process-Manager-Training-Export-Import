@@ -345,6 +345,84 @@ function Get-ScimUserById {
     }
 }
 
+function Get-ScimUserIdByUsername {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Username
+    )
+
+    try {
+        # SCIM API filter to find user by username
+        $filter = "userName eq `"$Username`""
+        $encodedFilter = [System.Uri]::EscapeDataString($filter)
+        $endpoint = "api/scim/users?filter=$encodedFilter"
+
+        $response = Invoke-ApiRequest -Endpoint $endpoint -Method Get -UseScimApi $true
+
+        if ($response -and $response.Resources -and $response.Resources.Count -gt 0) {
+            # Return the user ID from the first matching resource
+            return [int]$response.Resources[0].id
+        }
+
+        return $null
+    } catch {
+        Write-ColorOutput "Warning: Failed to lookup SCIM user for username $Username : $($_.Exception.Message)" -Type "Warning"
+        return $null
+    }
+}
+
+function Set-TrainingUnitTrainees {
+    param(
+        [Parameter(Mandatory=$true)]
+        [int]$TrainingUnitId,
+
+        [Parameter(Mandatory=$true)]
+        [array]$UserIds,
+
+        [Parameter(Mandatory=$false)]
+        [int]$SupervisorId = 0,
+
+        [Parameter(Mandatory=$false)]
+        [string]$DueDate = "",
+
+        [Parameter(Mandatory=$false)]
+        [string]$Provider = "",
+
+        [Parameter(Mandatory=$false)]
+        [string]$Location = ""
+    )
+
+    try {
+        # Build trainee model array
+        $traineeModels = @()
+        foreach ($userId in $UserIds) {
+            $traineeModels += @{ UserId = $userId }
+        }
+
+        # Build request body
+        $requestBody = @{
+            TrainingUnitId = $TrainingUnitId
+            SupervisorId = $SupervisorId
+            DueDate = $DueDate
+            Provider = $Provider
+            Location = $Location
+            ScheduleTraineesModel = $traineeModels
+        }
+
+        $endpoint = "$script:TenantName/Training/Schedule/SaveSchedule"
+        $response = Invoke-ApiRequest -Endpoint $endpoint -Method Post -Body $requestBody
+
+        if ($response) {
+            return $true
+        }
+
+        return $false
+    } catch {
+        Write-ColorOutput "Error assigning trainees to training unit: $($_.Exception.Message)" -Type "Error"
+        return $false
+    }
+}
+
 #endregion
 
 #region Export Functions
@@ -529,11 +607,43 @@ function Import-TrainingUnits {
             $endpoint = "$script:TenantName/Training/Unit/EditTrainingUnit"
             $response = Invoke-ApiRequest -Endpoint $endpoint -Method Post -Body $requestBody
 
-            if ($response) {
-                Write-ColorOutput "Successfully created: $($row.Title)" -Type "Success"
+            if ($response -and $response.trainingUnit) {
+                $trainingUnitId = $response.trainingUnit.Id
+                Write-ColorOutput "Successfully created: $($row.Title) (ID: $trainingUnitId)" -Type "Success"
+
+                # Assign trainees if provided
+                if ($row.'Trainees: Usernames' -and $row.'Trainees: Usernames'.Trim() -ne "") {
+                    Write-ColorOutput "Assigning trainees..." -Type "Info"
+                    $usernames = $row.'Trainees: Usernames' -split ';'
+                    $userIds = @()
+
+                    foreach ($username in $usernames) {
+                        if ($username.Trim() -ne "") {
+                            $userId = Get-ScimUserIdByUsername -Username $username.Trim()
+                            if ($userId) {
+                                $userIds += $userId
+                                Write-ColorOutput "  Found user: $($username.Trim()) (ID: $userId)" -Type "Info"
+                            } else {
+                                Write-ColorOutput "  Warning: Could not find UserId for username: $($username.Trim())" -Type "Warning"
+                            }
+                        }
+                    }
+
+                    if ($userIds.Count -gt 0) {
+                        $assignSuccess = Set-TrainingUnitTrainees -TrainingUnitId $trainingUnitId -UserIds $userIds -Provider $row.Provider
+                        if ($assignSuccess) {
+                            Write-ColorOutput "Successfully assigned $($userIds.Count) trainee(s)" -Type "Success"
+                        } else {
+                            Write-ColorOutput "Warning: Failed to assign trainees" -Type "Warning"
+                        }
+                    } else {
+                        Write-ColorOutput "No valid trainees found to assign" -Type "Warning"
+                    }
+                }
+
                 $successCount++
             } else {
-                $errorMsg = "Failed to create training unit (API returned null)"
+                $errorMsg = "Failed to create training unit (API returned null or invalid response)"
                 Write-ColorOutput $errorMsg -Type "Error"
                 $failedRows += [PSCustomObject]@{
                     Row = $currentRow
