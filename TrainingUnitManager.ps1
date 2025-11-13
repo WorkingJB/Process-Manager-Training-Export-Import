@@ -488,6 +488,15 @@ function Export-TrainingUnits {
             }
         }
 
+        # Get owner username from SCIM
+        $ownerUsername = ""
+        if ($details.OwnerId) {
+            $ownerUsername = Get-ScimUserById -UserId $details.OwnerId
+            if (-not $ownerUsername) {
+                Write-ColorOutput "Warning: Could not find SCIM username for owner UserId $($details.OwnerId), using blank" -Type "Warning"
+            }
+        }
+
         # Create export object
         $exportObject = [PSCustomObject]@{
             "Title" = $details.Title
@@ -496,6 +505,7 @@ function Export-TrainingUnits {
             "Assessment Label" = (Get-AssessmentLabel -AssessmentValue $details.AssessmentMethod)
             "Renew Cycle" = $details.RenewCycle
             "Provider" = $details.Provider
+            "Owner Username" = $ownerUsername
             "Linked Processes: Title" = ($linkedProcessTitles -join ";")
             "Linked Processes: uniqueId" = ($linkedProcessUniqueIds -join ";")
             "Linked Documents: Titles" = ($linkedDocTitles -join ";")
@@ -623,6 +633,23 @@ function Import-TrainingUnits {
                 }
             }
 
+            # Look up owner UserId from username
+            $ownerId = 0
+            $ownerName = ""
+            if ($row.'Owner Username' -and $row.'Owner Username'.Trim() -ne "") {
+                Write-ColorOutput "Looking up owner: $($row.'Owner Username'.Trim())" -Type "Info"
+                $ownerId = Get-ScimUserIdByUsername -Username $row.'Owner Username'.Trim()
+                if ($ownerId) {
+                    Write-ColorOutput "  Found owner: $($row.'Owner Username'.Trim()) (ID: $ownerId)" -Type "Info"
+                    $ownerName = $row.'Owner Username'.Trim()
+                } else {
+                    Write-ColorOutput "  Warning: Could not find UserId for owner username: $($row.'Owner Username'.Trim())" -Type "Warning"
+                    throw "Owner username not found in SCIM. Training unit requires a valid owner."
+                }
+            } else {
+                throw "Owner Username is required but not provided in CSV"
+            }
+
             # Build request body
             $typeValue = Get-TypeValue -TypeLabel $row.Type
             $typeLabel = Get-TypeLabel -TypeValue $typeValue
@@ -640,6 +667,13 @@ function Import-TrainingUnits {
                 Provider = $row.Provider
                 Location = ""
                 ReferenceNumber = ""
+                OwnerId = $ownerId
+                Owner = @{
+                    UserId = $ownerId
+                    Name = $ownerName
+                    AvatarUrl = ""
+                    Email = ""
+                }
                 LinkedProcesses = $linkedProcesses
                 LinkedDocuments = $linkedDocuments
                 OtherResources = @()

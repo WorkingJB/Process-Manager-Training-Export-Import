@@ -55,6 +55,7 @@ The export feature will:
 - Assessment Label (label value: None, Self Sign Off, Supervisor Sign Off)
 - Renew Cycle (integer value)
 - Provider
+- Owner Username (username/email address from SCIM API)
 - Linked Processes: Title (semicolon-delimited)
 - Linked Processes: uniqueId (semicolon-delimited)
 - Linked Documents: Titles (semicolon-delimited)
@@ -78,6 +79,7 @@ The import feature will:
 - Assessment Label (label or integer: see Assessment Method Values below)
 - Renew Cycle (integer: see Renew Cycle Values below)
 - Provider
+- Owner Username (required - username/email address from SCIM, will be looked up to get UserId)
 - Linked Processes: Title (semicolon-delimited, optional - for reference only)
 - Linked Processes: uniqueId (semicolon-delimited, no spaces)
 - Linked Documents: Titles (semicolon-delimited, no spaces)
@@ -119,9 +121,9 @@ Contact your Process Manager administrator for the specific integer values used 
 See [ImportTemplate.csv](ImportTemplate.csv) for an example CSV file format.
 
 ```csv
-Title,Description,Type,Assessment Label,Renew Cycle,Provider,Linked Processes: Title,Linked Processes: uniqueId,Linked Documents: Titles,Trainees: Usernames
-Safety Training 101,Basic safety training for all employees,Course,Self Sign Off,1,Safety Corp,,3be24da1-4e95-4edb-b94c-f39e14c61081,Safety Manual.pdf;Emergency Procedures.docx,john.doe@example.com;jane.smith@example.com
-Advanced Excel Course,Advanced Excel training for data analysts,Online Resource,Supervisor Sign Off,12,Tech Training LLC,,,Excel Guide.xlsx,
+Title,Description,Type,Assessment Label,Renew Cycle,Provider,Owner Username,Linked Processes: Title,Linked Processes: uniqueId,Linked Documents: Titles,Trainees: Usernames
+Safety Training 101,Basic safety training for all employees,Course,Self Sign Off,1,Safety Corp,john.doe@example.com,,3be24da1-4e95-4edb-b94c-f39e14c61081,Safety Manual.pdf;Emergency Procedures.docx,john.doe@example.com;jane.smith@example.com
+Advanced Excel Course,Advanced Excel training for data analysts,Online Resource,Supervisor Sign Off,12,Tech Training LLC,jane.smith@example.com,,,Excel Guide.xlsx,
 ```
 
 ## Error Handling
