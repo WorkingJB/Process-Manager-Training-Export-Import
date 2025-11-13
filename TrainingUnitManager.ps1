@@ -13,9 +13,6 @@
 [CmdletBinding()]
 param()
 
-# Load required assemblies
-Add-Type -AssemblyName System.Web
-
 # Global variables
 $script:BaseUrl = ""
 $script:TenantName = ""
@@ -312,31 +309,26 @@ function Get-TrainingUnitTrainees {
     return $allTrainees
 }
 
-function Get-ScimUserByName {
+function Get-ScimUserById {
     param(
         [Parameter(Mandatory=$true)]
-        [string]$FirstName,
-
-        [Parameter(Mandatory=$true)]
-        [string]$LastName
+        [int]$UserId
     )
 
     try {
-        # SCIM API filter for finding user by first and last name
-        $filter = "name.givenName eq `"$FirstName`" and name.familyName eq `"$LastName`""
-        $encodedFilter = [System.Web.HttpUtility]::UrlEncode($filter)
-        $endpoint = "api/scim/users?filter=$encodedFilter"
+        # SCIM API endpoint to get user by ID
+        $endpoint = "api/scim/users/$UserId"
 
         $response = Invoke-ApiRequest -Endpoint $endpoint -Method Get -UseScimApi $true
 
         if ($response -and $response.Resources -and $response.Resources.Count -gt 0) {
-            # Return the first matching user's userName
+            # Return the userName from the first resource
             return $response.Resources[0].userName
         }
 
         return $null
     } catch {
-        Write-ColorOutput "Warning: Failed to lookup SCIM user for $FirstName $LastName : $($_.Exception.Message)" -Type "Warning"
+        Write-ColorOutput "Warning: Failed to lookup SCIM user for UserId $UserId : $($_.Exception.Message)" -Type "Warning"
         return $null
     }
 }
@@ -395,12 +387,12 @@ function Export-TrainingUnits {
         $trainees = Get-TrainingUnitTrainees -UnitUniqueId $unit.UniqueId
         $traineeUsernames = @()
         foreach ($trainee in $trainees) {
-            if ($trainee.UserFirstName -and $trainee.UserLastName) {
-                $username = Get-ScimUserByName -FirstName $trainee.UserFirstName -LastName $trainee.UserLastName
+            if ($trainee.UserId) {
+                $username = Get-ScimUserById -UserId $trainee.UserId
                 if ($username) {
                     $traineeUsernames += $username
                 } else {
-                    Write-ColorOutput "Warning: Could not find SCIM username for $($trainee.UserFullName), skipping..." -Type "Warning"
+                    Write-ColorOutput "Warning: Could not find SCIM username for UserId $($trainee.UserId) ($($trainee.UserFullName)), skipping..." -Type "Warning"
                 }
             }
         }

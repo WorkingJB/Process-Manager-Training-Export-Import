@@ -46,7 +46,7 @@ The export feature will:
   - Assigned trainees (with username lookup via SCIM API)
 - Save data to a CSV file named `TrainingUnits_Export_YYYYMMDD.csv`
 
-**Note:** The export process queries the SCIM API to retrieve usernames (email addresses) for each trainee. This provides a reliable identifier for future trainee assignment during import.
+**Note:** The export process retrieves trainee UserIds from the Training/Trainee endpoint, then queries the SCIM API to lookup usernames (email addresses) for each trainee. This provides a reliable identifier for future trainee assignment during import.
 
 **Export CSV Columns:**
 - Title
@@ -193,7 +193,8 @@ For issues or questions:
 - **Enhanced Trainee Export with SCIM Integration**
   - Export now retrieves usernames from SCIM API instead of full names
   - Trainees are now exported with their username (email address) for easier import
-  - Added SCIM user lookup function with name-based filtering
+  - Added SCIM user lookup function using UserId from Training/Trainee endpoint
+  - SCIM API is queried by UserId to retrieve userName field
   - Usernames are more suitable for future trainee assignment during import
 
 **v1.2**
