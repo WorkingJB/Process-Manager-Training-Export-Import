@@ -434,7 +434,8 @@ function Export-TrainingUnits {
     $allUnits = Get-AllTrainingUnits
 
     if ($allUnits.Count -eq 0) {
-        Write-ColorOutput "No training units found to export." -Type "Warning"
+        Write-ColorOutput "`nNo training units found to export." -Type "Warning"
+        Write-ColorOutput "This could mean there are no training units in the system, or there was an error fetching them." -Type "Warning"
         return
     }
 
@@ -529,7 +530,10 @@ function Import-TrainingUnits {
     $csvPath = Read-Host "Enter the path to the CSV file"
 
     if (-not (Test-Path $csvPath)) {
-        Write-ColorOutput "File not found: $csvPath" -Type "Error"
+        Write-ColorOutput "`nERROR: File not found: $csvPath" -Type "Error"
+        Write-ColorOutput "Please check the file path and try again." -Type "Error"
+        Write-Host "`nPress any key to exit..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         return
     }
 
@@ -537,7 +541,39 @@ function Import-TrainingUnits {
     try {
         $csvData = Import-Csv -Path $csvPath
     } catch {
-        Write-ColorOutput "Failed to read CSV file: $($_.Exception.Message)" -Type "Error"
+        Write-ColorOutput "`nERROR: Failed to read CSV file: $($_.Exception.Message)" -Type "Error"
+        Write-ColorOutput "Please ensure the file is a valid CSV format." -Type "Error"
+        Write-Host "`nPress any key to exit..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        return
+    }
+
+    if ($csvData.Count -eq 0) {
+        Write-ColorOutput "`nERROR: The CSV file is empty or has no data rows." -Type "Error"
+        Write-Host "`nPress any key to exit..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        return
+    }
+
+    # Validate required columns
+    $requiredColumns = @('Title', 'Description', 'Type', 'Assessed Label', 'Renew Cycle', 'Provider')
+    $firstRow = $csvData | Select-Object -First 1
+    $missingColumns = @()
+
+    foreach ($column in $requiredColumns) {
+        if (-not ($firstRow.PSObject.Properties.Name -contains $column)) {
+            $missingColumns += $column
+        }
+    }
+
+    if ($missingColumns.Count -gt 0) {
+        Write-ColorOutput "`nERROR: The CSV file is missing required columns:" -Type "Error"
+        foreach ($col in $missingColumns) {
+            Write-ColorOutput "  - $col" -Type "Error"
+        }
+        Write-ColorOutput "`nPlease ensure your CSV has all required columns. See ImportTemplate.csv for reference." -Type "Error"
+        Write-Host "`nPress any key to exit..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         return
     }
 
@@ -690,6 +726,8 @@ function Main {
 
     if (-not $authSuccess) {
         Write-ColorOutput "`nAuthentication failed. Exiting..." -Type "Error"
+        Write-Host "`nPress any key to exit..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         return
     }
 
@@ -700,9 +738,20 @@ function Main {
     }
 
     Write-ColorOutput "`nScript completed!" -Type "Success"
+    Write-Host "`nPress any key to exit..."
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 }
 
 # Run main function
-Main
+try {
+    Main
+} catch {
+    Write-ColorOutput "`n=== UNEXPECTED ERROR ===" -Type "Error"
+    Write-ColorOutput "An unexpected error occurred: $($_.Exception.Message)" -Type "Error"
+    Write-ColorOutput "`nStack trace:" -Type "Error"
+    Write-Host $_.ScriptStackTrace -ForegroundColor Red
+    Write-Host "`nPress any key to exit..."
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+}
 
 #endregion
