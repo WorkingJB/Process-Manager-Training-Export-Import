@@ -769,6 +769,10 @@ function Import-TrainingUnits {
                         Write-ColorOutput "Debug: OwnerId variable value before assignment: '$ownerId' (Type: $($ownerId.GetType().Name))" -Type "Info"
                         Write-ColorOutput "Debug: Using Owner ID ($ownerId) as Supervisor for trainee assignment" -Type "Info"
 
+                        # Calculate due date (one month from now)
+                        $dueDate = (Get-Date).AddMonths(1).ToString("dd MMM yyyy")
+                        Write-ColorOutput "Debug: Setting due date to: $dueDate" -Type "Info"
+
                         # Store provider value to avoid parameter binding issues
                         $providerValue = if ($row.Provider) { $row.Provider } else { "" }
 
@@ -777,6 +781,7 @@ function Import-TrainingUnits {
                             -TrainingUnitId $trainingUnitId `
                             -UserIds $userIds `
                             -SupervisorId ([int]$ownerId) `
+                            -DueDate $dueDate `
                             -Provider $providerValue
                         if ($assignSuccess) {
                             Write-ColorOutput "Successfully assigned $($userIds.Count) trainee(s)" -Type "Success"
