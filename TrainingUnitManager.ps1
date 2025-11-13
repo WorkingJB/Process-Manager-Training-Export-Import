@@ -624,14 +624,22 @@ function Import-TrainingUnits {
             }
 
             # Build request body
+            $typeValue = Get-TypeValue -TypeLabel $row.Type
+            $typeLabel = Get-TypeLabel -TypeValue $typeValue
+
             $requestBody = @{
                 Id = 0  # 0 for new training unit
                 Title = $row.Title
                 Description = $row.Description
-                Type = (Get-TypeValue -TypeLabel $row.Type)
+                Type = $typeValue.ToString()  # API expects string
+                TypeLabel = $typeLabel
                 AssessmentMethod = (Get-AssessmentValue -AssessmentLabel $row.'Assessment Label')
                 RenewCycle = [int]$row.'Renew Cycle'
+                RenewCycleLabel = ""
+                RenewalPeriod = 0
                 Provider = $row.Provider
+                Location = ""
+                ReferenceNumber = ""
                 LinkedProcesses = $linkedProcesses
                 LinkedDocuments = $linkedDocuments
                 OtherResources = @()
